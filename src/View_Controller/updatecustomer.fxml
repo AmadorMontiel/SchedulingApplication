@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="539.0" prefWidth="705.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.UpdateCustomerController">
+    <children>
+        <Pane layoutX="14.0" layoutY="12.0" prefHeight="520.0" prefWidth="679.0" style="-fx-border-color: black; -fx-border-radius: 5;">
+            <children>
+                <Label layoutX="14.0" layoutY="14.0" text="Update Customer">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <VBox layoutX="105.0" layoutY="59.0" spacing="15.0">
+                    <children>
+                        <TextField fx:id="customerIDTextField" disable="true" editable="false" />
+                        <TextField fx:id="nameTextFIeld" />
+                        <TextField fx:id="addressTextField" />
+                        <TextField fx:id="postalCodeTextField" />
+                        <TextField fx:id="phoneNumberTextField" />
+                    </children>
+                </VBox>
+                <VBox layoutX="14.0" layoutY="59.0" prefHeight="165.0" prefWidth="81.0" spacing="25.0">
+                    <children>
+                        <Label text="Customer ID" />
+                        <Label text="Name" />
+                        <Label text="Address" />
+                        <Label text="Postal Code" />
+                        <Label text="Phone Number" />
+                    </children>
+                </VBox>
+                <Button layoutX="513.0" layoutY="478.0" mnemonicParsing="false" text="Save" />
+                <Button layoutX="598.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#close" text="Cancel" />
+            <ComboBox fx:id="countryComboBox" layoutX="438.0" layoutY="59.0" prefWidth="150.0" />
+            <Label layoutX="367.0" layoutY="63.0" text="Country" />
+            <ComboBox fx:id="firstLevelDivisionComboBox" layoutX="438.0" layoutY="139.0" prefWidth="150.0" />
+            <Label layoutX="367.0" layoutY="143.0" text="Division" />
+            <TableView fx:id="customerTableView" layoutX="100.0" layoutY="270.0" prefHeight="200.0" prefWidth="479.0">
+              <columns>
+                <TableColumn fx:id="customerIDColumn" prefWidth="75.0" text="Customer ID" />
+                <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="customerAddressColumn" prefWidth="75.0" text="Address" />
+                  <TableColumn fx:id="customerPostalCodeColumn" prefWidth="75.0" text="Postal Code" />
+                  <TableColumn fx:id="customerPhoneNumberColumn" prefWidth="101.0" text="Phone Number" />
+                  <TableColumn fx:id="customerFLDColumn" prefWidth="75.0" text="Division" />
+              </columns>
+            </TableView>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

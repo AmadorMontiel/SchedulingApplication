@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="491.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.UpdateAppointmentController">
+    <children>
+        <Pane layoutX="15.0" layoutY="13.0" prefHeight="465.0" prefWidth="610.0">
+            <children>
+                <Label layoutX="6.0" layoutY="6.0" text="Update Appointment">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+            <Button layoutX="470.0" layoutY="426.0" mnemonicParsing="false" text="Save" />
+            <Button layoutX="544.0" layoutY="426.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
+                <VBox layoutY="50.0" prefHeight="332.0" prefWidth="113.0" spacing="18.0">
+                    <children>
+                        <Label text="Appointment ID" />
+                        <Label text="TItle" />
+                        <Label text="Description" />
+                        <Label text="Location" />
+                        <Label text="Contact" />
+                        <Label text="Type" />
+                        <Label text="Start Date and Time" />
+                        <Label text="End Date and Time" />
+                        <Label text="Customer ID" />
+                        <Label text="User" />
+                    </children>
+                </VBox>
+                <VBox fillWidth="false" layoutX="155.0" layoutY="50.0" spacing="10.0">
+                    <children>
+                        <TextField editable="false" />
+                        <TextField />
+                        <TextField />
+                        <TextField />
+                        <ComboBox prefWidth="150.0" />
+                        <ComboBox prefWidth="150.0" />
+                        <DatePicker />
+                        <DatePicker />
+                        <ComboBox prefWidth="150.0" />
+                        <ComboBox prefWidth="150.0" />
+                    </children>
+                </VBox>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

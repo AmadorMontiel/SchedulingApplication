@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ReportsController">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="376.0" prefWidth="571.0">
+         <children>
+            <Label layoutX="24.0" layoutY="14.0" text="Reports">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Button layoutX="491.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

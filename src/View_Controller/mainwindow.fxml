@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="362.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.MainWindowController">
+   <children>
+      <Label layoutX="190.0" layoutY="29.0" text="Alpha Ocelot Scheduling">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Pane layoutX="15.0" layoutY="98.0" prefHeight="177.0" prefWidth="351.0" style="-fx-border-color: black; -fx-background-color: lightblue;">
+         <children>
+            <Label layoutX="129.0" layoutY="3.0" prefHeight="27.0" prefWidth="94.0" text="Customers">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="176.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#addCustomerClicked" text="Add" />
+            <Button layoutX="224.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#updateCustomerClicked" text="Update" />
+            <Button layoutX="286.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#deleteCustomerClicked" text="Delete" />
+            <ComboBox fx:id="customersComboBox" layoutX="85.0" layoutY="49.0" prefHeight="25.0" prefWidth="182.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="396.0" layoutY="98.0" prefHeight="177.0" prefWidth="351.0" style="-fx-border-color: black; -fx-background-color: lightblue;">
+         <children>
+            <Label layoutX="115.0" layoutY="1.0" text="Appointments">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="176.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#addAppointmentClicked" text="Add" />
+            <Button layoutX="224.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#updateAppointmentClicked" text="Update" />
+            <Button layoutX="286.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#deleteAppointmentClicked" text="Delete" />
+            <Button layoutX="14.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#viewAppointmentsClicked" text="View" />
+            <ComboBox fx:id="appointmentsComboBox" layoutX="85.0" layoutY="48.0" prefHeight="25.0" prefWidth="182.0" />
+         </children>
+      </Pane>
+      <Button layoutX="14.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#reportsClicked" text="Reports" />
+      <Button layoutX="712.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#exitProgram" text="Exit" />
+   </children>
+</Pane>
