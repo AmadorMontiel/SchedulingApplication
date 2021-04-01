@@ -3,7 +3,10 @@ package View_Controller;
 import DataModel.Country;
 import DataModel.Customer;
 import DataModel.FirstLevelDivision;
+import Implementations.CountryDaoImpl;
 import Implementations.FirstLevelDivisionDaoImpl;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -34,9 +37,20 @@ public class UpdateCustomerController {
     public TableColumn<Customer, String> customerPhoneNumberColumn;
     public TableColumn<Customer, String> customerFLDColumn;
 
+    private ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
     private Customer tempCustomer;
+    private FirstLevelDivision fld;
+    private Country country;
 
 
+    public void initialize() {
+        countryComboBox.setItems(countryObservableList);
+    }
+
+    public void countrySelection(ActionEvent event) {
+        firstLevelDivisionComboBox.setValue(null);
+        firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
+    }
     public void receiveCustomer(Customer selectedCustomer) {
 
         tempCustomer = selectedCustomer;
@@ -46,12 +60,18 @@ public class UpdateCustomerController {
         addressTextField.setText(selectedCustomer.getAddress());
         postalCodeTextField.setText(selectedCustomer.getPostalCode());
         phoneNumberTextField.setText(selectedCustomer.getPhoneNumber());
-        //firstLevelDivisionComboBox.setItems();
 
-
-
+        getFLDandCountry(selectedCustomer);
+        firstLevelDivisionComboBox.setValue(fld);
+        countryComboBox.setValue(country);
 
     }
+
+    private void getFLDandCountry(Customer selectedCustomer) {
+        fld = FirstLevelDivisionDaoImpl.getDivisionByID(selectedCustomer.getDivisionID());
+        country = CountryDaoImpl.getCountryByID(fld.getCountryID());
+    }
+
 
     /**
      * Closes the add appointment screen and takes the use back to the main screen.

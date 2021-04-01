@@ -36,7 +36,7 @@ public class AddCustomerController {
 
     }
 
-    public void countrySelection(ActionEvent event) {
+    public void countrySelection() {
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
     }
 

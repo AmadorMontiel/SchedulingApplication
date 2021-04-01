@@ -33,7 +33,7 @@
                 </VBox>
                 <Button layoutX="513.0" layoutY="478.0" mnemonicParsing="false" text="Save" />
                 <Button layoutX="598.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#close" text="Cancel" />
-            <ComboBox fx:id="countryComboBox" layoutX="438.0" layoutY="59.0" prefWidth="150.0" />
+            <ComboBox fx:id="countryComboBox" layoutX="438.0" layoutY="59.0" onAction="#countrySelection" prefWidth="150.0" />
             <Label layoutX="367.0" layoutY="63.0" text="Country" />
             <ComboBox fx:id="firstLevelDivisionComboBox" layoutX="438.0" layoutY="139.0" prefWidth="150.0" />
             <Label layoutX="367.0" layoutY="143.0" text="Division" />
