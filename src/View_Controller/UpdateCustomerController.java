@@ -4,6 +4,7 @@ import DataModel.Country;
 import DataModel.Customer;
 import DataModel.FirstLevelDivision;
 import Implementations.CountryDaoImpl;
+import Implementations.CustomerDaoImpl;
 import Implementations.FirstLevelDivisionDaoImpl;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -27,8 +29,10 @@ public class UpdateCustomerController {
     public TextField addressTextField;
     public TextField postalCodeTextField;
     public TextField phoneNumberTextField;
+
     public ComboBox<Country> countryComboBox;
     public ComboBox<FirstLevelDivision> firstLevelDivisionComboBox;
+
     public TableView<Customer> customerTableView;
     public TableColumn<Customer, Integer> customerIDColumn;
     public TableColumn<Customer, String> customerNameColumn;
@@ -38,16 +42,26 @@ public class UpdateCustomerController {
     public TableColumn<Customer, String> customerFLDColumn;
 
     private ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
+    private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
     private Customer tempCustomer;
     private FirstLevelDivision fld;
     private Country country;
 
 
     public void initialize() {
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerPostalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customerPhoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        customerFLDColumn.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+        customerTableView.setItems(customerObservableList);
+
         countryComboBox.setItems(countryObservableList);
+
     }
 
-    public void countrySelection(ActionEvent event) {
+    public void countrySelection() {
         firstLevelDivisionComboBox.setValue(null);
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
     }
