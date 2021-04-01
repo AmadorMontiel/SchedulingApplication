@@ -91,12 +91,20 @@ public class MainWindowController {
     }
 
     public void deleteCustomerClicked(MouseEvent event) {
-        sceneLoader(event, "deletecustomer.fxml");
+
+        //TODO Add is message checking to make sure user wants to delete the customer
+        //TODO Add in check to see if there are any associated appointments for the customer
+        try {
+            customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
+            CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
+
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addAppointmentClicked(MouseEvent event) {
-        //TODO delete CustomerDaoImpl.addCustomer(8,"amador","123 main st", "98012",
-        //        "4252182222",1);
         sceneLoader(event, "addappointment.fxml");
     }
 

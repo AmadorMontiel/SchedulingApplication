@@ -16,7 +16,7 @@
                 <VBox layoutX="105.0" layoutY="59.0" spacing="15.0">
                     <children>
                         <TextField fx:id="customerIDTextField" disable="true" editable="false" />
-                        <TextField fx:id="nameTextFIeld" />
+                        <TextField fx:id="nameTextField" />
                         <TextField fx:id="addressTextField" />
                         <TextField fx:id="postalCodeTextField" />
                         <TextField fx:id="phoneNumberTextField" />
@@ -31,7 +31,7 @@
                         <Label text="Phone Number" />
                     </children>
                 </VBox>
-                <Button layoutX="513.0" layoutY="478.0" mnemonicParsing="false" text="Save" />
+                <Button layoutX="513.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#saveModifiedCustomer" text="Save" />
                 <Button layoutX="598.0" layoutY="478.0" mnemonicParsing="false" onMouseClicked="#close" text="Cancel" />
             <ComboBox fx:id="countryComboBox" layoutX="438.0" layoutY="59.0" onAction="#countrySelection" prefWidth="150.0" />
             <Label layoutX="367.0" layoutY="63.0" text="Country" />

@@ -7,7 +7,6 @@ import Implementations.CountryDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Implementations.FirstLevelDivisionDaoImpl;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -25,7 +24,7 @@ import java.io.IOException;
 public class UpdateCustomerController {
 
     public TextField customerIDTextField;
-    public TextField nameTextFIeld;
+    public TextField nameTextField;
     public TextField addressTextField;
     public TextField postalCodeTextField;
     public TextField phoneNumberTextField;
@@ -58,7 +57,6 @@ public class UpdateCustomerController {
         customerTableView.setItems(customerObservableList);
 
         countryComboBox.setItems(countryObservableList);
-
     }
 
     public void countrySelection() {
@@ -66,11 +64,10 @@ public class UpdateCustomerController {
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
     }
     public void receiveCustomer(Customer selectedCustomer) {
-
         tempCustomer = selectedCustomer;
 
         customerIDTextField.setText(String.valueOf(selectedCustomer.getId()));
-        nameTextFIeld.setText(selectedCustomer.getName());
+        nameTextField.setText(selectedCustomer.getName());
         addressTextField.setText(selectedCustomer.getAddress());
         postalCodeTextField.setText(selectedCustomer.getPostalCode());
         phoneNumberTextField.setText(selectedCustomer.getPhoneNumber());
@@ -79,6 +76,16 @@ public class UpdateCustomerController {
         firstLevelDivisionComboBox.setValue(fld);
         countryComboBox.setValue(country);
 
+    }
+
+    public void saveModifiedCustomer(MouseEvent event) throws IOException {
+        CustomerDaoImpl.modifyCustomer(Integer.parseInt(customerIDTextField.getText()),
+                nameTextField.getText(),
+                addressTextField.getText(),
+                postalCodeTextField.getText(),
+                phoneNumberTextField.getText(),
+                firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionID());
+        close(event);
     }
 
     private void getFLDandCountry(Customer selectedCustomer) {

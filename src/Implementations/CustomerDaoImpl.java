@@ -6,6 +6,7 @@ import Utility.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -88,7 +89,33 @@ public class CustomerDaoImpl {
         }
     }
 
-    public static void modifyCustomer(Customer customer) {
+    public static void modifyCustomer(int ID, String name, String address, String postalCode,
+                                      String phoneNumber, int divisionID) {
+        String sql = "UPDATE customers set Customer_Name = ?, Address = ?, Postal_Code = ?" +
+                ", Phone = ?,  Division_ID = ? WHERE Customer_ID = ?";
+
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setString(3, postalCode);
+            ps.setString(4, phoneNumber);
+            ps.setInt(5, divisionID);
+            ps.setInt(6, ID);
+            ps.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void deleteCustomer(int ID) {
+        try {
+            String sql = "DELETE FROM customers WHERE Customer_ID = " + ID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
 
     }
 }
