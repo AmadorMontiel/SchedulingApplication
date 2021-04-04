@@ -1,12 +1,9 @@
 package Implementations;
 
 import DataModel.Customer;
-import DataModel.User;
 import Utility.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.Clock;
 import java.time.LocalDateTime;

@@ -20,6 +20,8 @@ import java.io.IOException;
 public class MainWindowController {
 
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    public Alert deletionConfirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
     public Stage stage;
@@ -92,15 +94,29 @@ public class MainWindowController {
 
     public void deleteCustomerClicked(MouseEvent event) {
 
-        //TODO Add is message checking to make sure user wants to delete the customer
+        //TODO Add in message checking to make sure user wants to delete the customer
         //TODO Add in check to see if there are any associated appointments for the customer
-        try {
-            customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
-            CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
 
+        boolean isCustomerDeleted = false;
+        if (customersComboBox.getSelectionModel().getSelectedItem() != null) {
 
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            deletionConfirmationAlert.setTitle("Confirmation");
+            deletionConfirmationAlert.setHeaderText("Confirm Customer Deletion");
+            deletionConfirmationAlert.setContentText("Are you sure you want to delete " + customersComboBox.getSelectionModel().getSelectedItem().getName());
+            deletionConfirmationAlert.showAndWait();
+
+            try {
+                customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
+                CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        } else {
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("No Customer Selected");
+            errorAlert.setContentText("Please select a customer to delete");
+            errorAlert.show();
         }
     }
 

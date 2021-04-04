@@ -1,5 +1,6 @@
 package View_Controller;
 
+import Implementations.UserDaoImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -109,9 +110,10 @@ public class LoginController {
      */
     public void login(MouseEvent event) throws IOException {
 
-       logAppicationLogin();
+       boolean isValidLogin = UserDaoImpl.isValidLogin(usernameTextField.getText(), passwordField.getText());
+        logAppicationLogin(isValidLogin);
 
-       if(isLoginCorrect()) {
+       if(isValidLogin) {
                FXMLLoader loader = new FXMLLoader();
                loader.setLocation(getClass().getResource("mainwindow.fxml"));
                try {
@@ -123,13 +125,25 @@ public class LoginController {
                fw.close();
                pw.close();
            }
+       else {
+           if(Locale.getDefault().getLanguage().equals("fr")){
+               loginAlert.setTitle(rb.getString("error"));
+               loginAlert.setHeaderText(rb.getString("unable_to_login"));
+               loginAlert.setContentText(rb.getString("incorrect_username_or_password"));
+           } else {
+               loginAlert.setTitle("Error");
+               loginAlert.setHeaderText("Unable to login");
+               loginAlert.setContentText("Incorrect username or password");
+           }
+           loginAlert.show();
+       }
    }
 
     /**
      * Logs login infomation to the "login_activity" file.
      */
-    private void logAppicationLogin() {
-        if(!isLoginCorrect()) {
+    private void logAppicationLogin(boolean isValidLogin) {
+        if(!isValidLogin) {
             pw.println("Login Attempt #" + loginCount + " - User: " + usernameTextField.getText() +
                     " - Occured at: " + ZonedDateTime.now(ZoneId.of("UTC")).format(dtf)  + " - Unsuccessful.");
             loginCount++;
@@ -157,28 +171,6 @@ public class LoginController {
         Parent scene = loader.getRoot();
         stage.setScene(new Scene(scene));
         stage.show();
-    }
-
-    /**
-     * Checks the username and password of the user logging into the applciation.
-     * Displays a message if there is an unsuccessful login.
-     */
-    private boolean isLoginCorrect() {
-        if(!usernameTextField.getText().equals("test") || !passwordField.getText().equals("test")) {
-            if(Locale.getDefault().getLanguage().equals("fr")){
-                loginAlert.setTitle(rb.getString("error"));
-                loginAlert.setHeaderText(rb.getString("unable_to_login"));
-                loginAlert.setContentText(rb.getString("incorrect_username_or_password"));
-            } else {
-                loginAlert.setTitle("Error");
-                loginAlert.setHeaderText("Unable to login");
-                loginAlert.setContentText("Incorrect username or password");
-            }
-            loginAlert.show();
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
