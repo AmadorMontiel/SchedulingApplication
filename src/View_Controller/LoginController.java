@@ -105,7 +105,9 @@ public class LoginController {
     }
 
     /**
-     * Logs into the application and loads the main screen.
+     * Passes the username and password information provided to the UserDAO to check to see if the information is valid.
+     * If the inforamtion is valid, logs into the applicaiton and loads the main screen.
+     * If the information is invalid, shows an error message.
      * @param event Clicking "Login" triggers the action.
      */
     public void login(MouseEvent event) throws IOException {

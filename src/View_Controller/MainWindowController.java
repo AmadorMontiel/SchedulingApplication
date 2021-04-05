@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -21,13 +22,14 @@ public class MainWindowController {
 
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
     public Alert deletionConfirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    public Alert deletionConfirmedAlert = new Alert(Alert.AlertType.INFORMATION);
 
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
     public Stage stage;
     private Scene scene;
-    ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-    ObservableList<Appointment> appointmentsObservableList = AppointmentDaoImpl.getAllAppointments();
+    private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
+    private ObservableList<Appointment> appointmentsObservableList = AppointmentDaoImpl.getAllAppointments();
 
     public void initialize() {
 
@@ -89,28 +91,32 @@ public class MainWindowController {
             errorAlert.setContentText("Please select a customer to update");
             errorAlert.show();
         }
-
     }
 
     public void deleteCustomerClicked(MouseEvent event) {
 
-        //TODO Add in message checking to make sure user wants to delete the customer
         //TODO Add in check to see if there are any associated appointments for the customer
 
-        boolean isCustomerDeleted = false;
         if (customersComboBox.getSelectionModel().getSelectedItem() != null) {
 
             deletionConfirmationAlert.setTitle("Confirmation");
             deletionConfirmationAlert.setHeaderText("Confirm Customer Deletion");
-            deletionConfirmationAlert.setContentText("Are you sure you want to delete " + customersComboBox.getSelectionModel().getSelectedItem().getName());
+            deletionConfirmationAlert.setContentText("Are you sure you want to delete Customer: "
+                    + customersComboBox.getSelectionModel().getSelectedItem().getName());
             deletionConfirmationAlert.showAndWait();
 
-            try {
-                customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
-                CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
+            if(deletionConfirmationAlert.getResult() == ButtonType.OK) {
+                try {
+                    CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
+                    deletionConfirmedAlert.setTitle("Deletion Confirmed");
+                    deletionConfirmedAlert.setHeaderText("Customer Deleted");
+                    deletionConfirmedAlert.setContentText(customersComboBox.getSelectionModel().getSelectedItem().toString() + " has been deleted!");
+                    deletionConfirmedAlert.show();
+                    customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
 
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             errorAlert.setTitle("Error");

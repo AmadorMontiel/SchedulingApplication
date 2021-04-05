@@ -18,7 +18,7 @@
             <VBox layoutY="50.0" prefHeight="332.0" prefWidth="113.0" spacing="18.0">
                <children>
                   <Label text="Appointment ID" />
-                  <Label text="TItle" />
+                  <Label text="Title" />
                   <Label text="Description" />
                   <Label text="Location" />
                   <Label text="Contact" />
@@ -31,16 +31,16 @@
             </VBox>
             <VBox fillWidth="false" layoutX="155.0" layoutY="50.0" spacing="10.0">
                <children>
-                  <TextField editable="false" />
-                  <TextField />
-                  <TextField />
-                  <TextField />
-                  <ComboBox prefWidth="150.0" />
-                  <ComboBox prefWidth="150.0" />
-                  <DatePicker />
-                  <DatePicker />
-                  <ComboBox prefWidth="150.0" />
-                  <ComboBox prefWidth="150.0" />
+                  <TextField fx:id="appointmentIDTextField" editable="false" />
+                  <TextField fx:id="titleTextField"/>
+                  <TextField fx:id="descriptionTextField"/>
+                  <TextField fx:id="locationTextField"/>
+                  <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
+                  <ComboBox fx:id="typeComboBox" prefWidth="150.0" />
+                  <DatePicker fx:id="startDateTimePicker" />
+                  <DatePicker fx:id="endDateTimePicker" />
+                  <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
+                  <ComboBox fx:id="userComboBox" prefWidth="150.0" />
                </children>
             </VBox>
          </children>

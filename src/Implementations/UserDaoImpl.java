@@ -1,12 +1,17 @@
 package Implementations;
 
+import DataModel.User;
 import Utility.DBConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDaoImpl {
+
+    private static ObservableList<User> users;
 
     /**
      * Method that checks if the user logging into the application is a valid user with a valid password.
@@ -33,5 +38,29 @@ public class UserDaoImpl {
             throwables.printStackTrace();
         }
         return false;
+    }
+
+    public static ObservableList<User> getAllUsers() {
+        users = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT * from users";
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int userID = rs.getInt("User_ID");
+                String username = rs.getString("User_Name");
+                String password = rs.getString("Password");
+                User u = new User(userID,username,password);
+                users.add(u);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return users;
     }
 }
