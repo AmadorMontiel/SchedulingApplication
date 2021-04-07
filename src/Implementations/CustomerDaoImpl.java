@@ -1,5 +1,6 @@
 package Implementations;
 
+import DataModel.Appointment;
 import DataModel.Customer;
 import Utility.DBConnection;
 import javafx.collections.FXCollections;

@@ -14,6 +14,7 @@ public class AppointmentDaoImpl {
 
     public static int currentAppointmentID;
     private static ObservableList<Appointment> appointments;
+    private static ObservableList<Appointment> associatedAppointments;
 
     public static ObservableList<Appointment> getAllAppointments() {
         appointments = FXCollections.observableArrayList();
@@ -75,5 +76,21 @@ public class AppointmentDaoImpl {
             throwables.printStackTrace();
         }
 
+    }
+    public static int getAssociatedAppointments(int customerID) {
+
+        int associatedAppointmentsCounter = 0;
+
+        try {
+            String sql = "SELECT * FROM appointments WHERE Customer_ID = " + customerID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                associatedAppointmentsCounter++;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return associatedAppointmentsCounter;
     }
 }

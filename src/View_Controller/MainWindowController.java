@@ -93,30 +93,33 @@ public class MainWindowController {
         }
     }
 
-    public void deleteCustomerClicked(MouseEvent event) {
-
-        //TODO Add in check to see if there are any associated appointments for the customer
-
+    public void deleteCustomerClicked() {
         if (customersComboBox.getSelectionModel().getSelectedItem() != null) {
+            if(AppointmentDaoImpl.getAssociatedAppointments(customersComboBox.getSelectionModel().getSelectedItem().getId()) == 0) {
+                deletionConfirmationAlert.setTitle("Confirmation");
+                deletionConfirmationAlert.setHeaderText("Confirm Customer Deletion");
+                deletionConfirmationAlert.setContentText("Are you sure you want to delete Customer: "
+                        + customersComboBox.getSelectionModel().getSelectedItem().getName());
+                deletionConfirmationAlert.showAndWait();
 
-            deletionConfirmationAlert.setTitle("Confirmation");
-            deletionConfirmationAlert.setHeaderText("Confirm Customer Deletion");
-            deletionConfirmationAlert.setContentText("Are you sure you want to delete Customer: "
-                    + customersComboBox.getSelectionModel().getSelectedItem().getName());
-            deletionConfirmationAlert.showAndWait();
+                if (deletionConfirmationAlert.getResult() == ButtonType.OK) {
+                    try {
+                        CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
+                        deletionConfirmedAlert.setTitle("Deletion Confirmed");
+                        deletionConfirmedAlert.setHeaderText("Customer Deleted");
+                        deletionConfirmedAlert.setContentText(customersComboBox.getSelectionModel().getSelectedItem().toString() + " has been deleted!");
+                        deletionConfirmedAlert.show();
+                        customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
 
-            if(deletionConfirmationAlert.getResult() == ButtonType.OK) {
-                try {
-                    CustomerDaoImpl.deleteCustomer(customersComboBox.getSelectionModel().getSelectedItem().getId());
-                    deletionConfirmedAlert.setTitle("Deletion Confirmed");
-                    deletionConfirmedAlert.setHeaderText("Customer Deleted");
-                    deletionConfirmedAlert.setContentText(customersComboBox.getSelectionModel().getSelectedItem().toString() + " has been deleted!");
-                    deletionConfirmedAlert.show();
-                    customersComboBox.getItems().remove(customersComboBox.getSelectionModel().getSelectedItem());
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
+            } else {
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Unable To Delete Customer");
+                errorAlert.setContentText("Delete associated appointments first.");
+                errorAlert.show();
             }
         } else {
             errorAlert.setTitle("Error");

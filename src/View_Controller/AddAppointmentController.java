@@ -1,6 +1,5 @@
 package View_Controller;
 
-import DataModel.Appointment;
 import DataModel.Contact;
 import DataModel.Customer;
 import DataModel.User;
@@ -48,7 +47,6 @@ public class AddAppointmentController {
 
 
     private ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
-    private ObservableList<Appointment> appointmentTypeObservableList = AppointmentDaoImpl.getAllAppointments();
     private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
     private ObservableList<User> userObservableList = UserDaoImpl.getAllUsers();
 
@@ -64,6 +62,8 @@ public class AddAppointmentController {
             endTimeComboBox.getItems().add(startTime);
             startTime = startTime.plusMinutes(15);
         }
+        startTimeComboBox.getItems().add(LocalTime.of(23,45));
+        endTimeComboBox.getItems().add(LocalTime.of(23,45));
     }
 
     public void saveNewAppointment() {
@@ -80,6 +80,7 @@ public class AddAppointmentController {
 
     }
 
+    //TODO Add in check to see if appointment times overlap
     public boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
 
         LocalTime businessOpenTime = LocalTime.of(8,0);
