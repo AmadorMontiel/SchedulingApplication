@@ -4,18 +4,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="491.0" prefWidth="639.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddAppointmentController">
+<AnchorPane prefHeight="522.0" prefWidth="567.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddAppointmentController">
    <children>
-      <Pane layoutX="15.0" layoutY="13.0" prefHeight="465.0" prefWidth="610.0">
+      <Pane layoutX="15.0" layoutY="13.0" prefHeight="501.0" prefWidth="543.0">
          <children>
             <Label layoutX="6.0" layoutY="6.0" text="Add Appointment">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="470.0" layoutY="426.0" mnemonicParsing="false" text="Save" />
-            <Button layoutX="544.0" layoutY="426.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
-            <VBox layoutY="50.0" prefHeight="332.0" prefWidth="113.0" spacing="18.0">
+            <Button layoutX="451.0" layoutY="471.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
+            <VBox layoutY="50.0" prefHeight="342.0" prefWidth="106.0" spacing="18.0">
                <children>
                   <Label text="Appointment ID" />
                   <Label text="Title" />
@@ -23,26 +22,31 @@
                   <Label text="Location" />
                   <Label text="Contact" />
                   <Label text="Type" />
-                  <Label text="Start Date and Time" />
-                  <Label text="End Date and Time" />
+                  <Label prefHeight="18.0" prefWidth="254.0" text="Start Date" />
+                  <Label text="End Date" />
                   <Label text="Customer ID" />
                   <Label text="User" />
                </children>
             </VBox>
-            <VBox fillWidth="false" layoutX="155.0" layoutY="50.0" spacing="10.0">
+            <VBox fillWidth="false" layoutX="106.0" layoutY="46.0" spacing="10.0">
                <children>
-                  <TextField fx:id="appointmentIDTextField" editable="false" />
-                  <TextField fx:id="titleTextField"/>
-                  <TextField fx:id="descriptionTextField"/>
-                  <TextField fx:id="locationTextField"/>
+                  <TextField fx:id="appointmentIDTextField" disable="true" editable="false" />
+                  <TextField fx:id="titleTextField" />
+                  <TextField fx:id="descriptionTextField" />
+                  <TextField fx:id="locationTextField" />
                   <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
-                  <ComboBox fx:id="typeComboBox" prefWidth="150.0" />
+                  <TextField fx:id="typeTextField" />
                   <DatePicker fx:id="startDateTimePicker" />
                   <DatePicker fx:id="endDateTimePicker" />
                   <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
                   <ComboBox fx:id="userComboBox" prefWidth="150.0" />
                </children>
             </VBox>
+            <Button layoutX="387.0" layoutY="471.0" mnemonicParsing="false" onMouseClicked="#saveNewAppointment" text="Save" />
+            <ComboBox fx:id="startTimeComboBox" layoutX="387.0" layoutY="264.0" prefWidth="150.0" />
+            <ComboBox fx:id="endTimeComboBox" layoutX="387.0" layoutY="298.0" prefWidth="150.0" />
+            <Label layoutX="307.0" layoutY="268.0" text="Start TIme" />
+            <Label layoutX="307.0" layoutY="302.0" text="End Time" />
          </children>
       </Pane>
    </children>

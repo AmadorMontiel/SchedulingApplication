@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.*;
 
 public class AddAppointmentController {
 
@@ -27,15 +28,24 @@ public class AddAppointmentController {
     public TextField titleTextField;
     public TextField descriptionTextField;
     public TextField locationTextField;
+    public TextField typeTextField;
 
-    public ComboBox<Contact> contactComboBox;
-    public ComboBox<Appointment> typeComboBox;
+    public LocalDate startDate;
+    public LocalDate endDate;
+    public LocalTime startTime = LocalTime.MIDNIGHT;
+    public LocalTime endTime = LocalTime.of(23,44);
+    public LocalDateTime startDateAndTime;
+    public LocalDateTime endDateAndTime;
 
     public DatePicker startDateTimePicker;
     public DatePicker endDateTimePicker;
 
+    public ComboBox<Contact> contactComboBox;
     public ComboBox<Customer> customerComboBox;
     public ComboBox<User> userComboBox;
+    public ComboBox<LocalTime> startTimeComboBox;
+    public ComboBox<LocalTime> endTimeComboBox;
+
 
     private ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
     private ObservableList<Appointment> appointmentTypeObservableList = AppointmentDaoImpl.getAllAppointments();
@@ -45,10 +55,55 @@ public class AddAppointmentController {
     public void initialize() {
 
         contactComboBox.setItems(contactObservableList);
-        typeComboBox.setItems(appointmentTypeObservableList);
         customerComboBox.setItems(customerObservableList);
         userComboBox.setItems(userObservableList);
+        appointmentIDTextField.setText(String.valueOf(AppointmentDaoImpl.currentAppointmentID));
 
+        while (startTime.isBefore(endTime.plusSeconds(1))) {
+            startTimeComboBox.getItems().add(startTime);
+            endTimeComboBox.getItems().add(startTime);
+            startTime = startTime.plusMinutes(15);
+        }
+    }
+
+    public void saveNewAppointment() {
+
+        startDateAndTime = LocalDateTime.of(startDateTimePicker.getValue(), startTimeComboBox.getValue());
+        endDateAndTime = LocalDateTime.of(endDateTimePicker.getValue(), endTimeComboBox.getValue());
+
+        if(isAllowableTime(startDateAndTime, endDateAndTime)) {
+            AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
+                    locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
+                    customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
+                    contactComboBox.getSelectionModel().getSelectedItem().getContactID());
+        }
+
+    }
+
+    public boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
+
+        LocalTime businessOpenTime = LocalTime.of(8,0);
+        LocalTime businessCloseTime = LocalTime.of(22,0);
+
+        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
+        ZoneId easternTimeZone = ZoneId.of("America/New_York");
+
+        ZonedDateTime currentStartTime = start.atZone(localTimeZone);
+        ZonedDateTime currentEndTime = end.atZone(localTimeZone);
+
+        ZonedDateTime ESTStartTime = currentStartTime.withZoneSameInstant(easternTimeZone);
+        LocalTime eststarting = ESTStartTime.toLocalTime();
+        ZonedDateTime ESTEndTime = currentEndTime.withZoneSameInstant(easternTimeZone);
+        LocalTime estending = ESTEndTime.toLocalTime();
+
+        if (eststarting.isAfter(businessOpenTime.minusSeconds(1)) && estending.isBefore(businessCloseTime.plusSeconds(1))) {
+            System.out.println("This should return true.");
+            return true;
+
+        } else {
+            System.out.println("this should return false;");
+            return false;
+        }
     }
 
     /**

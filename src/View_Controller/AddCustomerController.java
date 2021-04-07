@@ -41,14 +41,12 @@ public class AddCustomerController {
     }
 
     public void saveNewCustomer(MouseEvent event) throws IOException {
-        boolean isCustomerCreated = false;
 
         CustomerDaoImpl.addCustomer(nameTextField.getText(),
                 addressTextField.getText(),
                 postalCodeTextField.getText(),
                 phoneNumberTextField.getText(),
                 firstLevelDivisionComboBox.getSelectionModel().getSelectedItem().getDivisionID());
-        isCustomerCreated = true;
         close(event);
     }
     /**

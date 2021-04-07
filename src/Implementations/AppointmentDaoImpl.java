@@ -12,10 +12,12 @@ import java.time.format.DateTimeFormatter;
 
 public class AppointmentDaoImpl {
 
+    public static int currentAppointmentID;
     private static ObservableList<Appointment> appointments;
 
     public static ObservableList<Appointment> getAllAppointments() {
         appointments = FXCollections.observableArrayList();
+        currentAppointmentID = 1;
         try {
             String sql = "SELECT * from appointments";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
@@ -35,6 +37,7 @@ public class AppointmentDaoImpl {
                 Appointment a = new Appointment(appointmentID,title,description,location,
                         type,start,end,customerID,userID,contactID);
                 appointments.add(a);
+                currentAppointmentID++;
             }
             rs.close();
             ps.close();
@@ -48,23 +51,25 @@ public class AppointmentDaoImpl {
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime start,
                                       LocalDateTime end, int customerID, int userID, int contactID) {
         try {
-            String sql = "INSERT INTO appointments VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            String sql = "INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, title);
-            ps.setString(2, description);
-            ps.setString(3, location);
-            ps.setString(4, type);
-            ps.setObject(5, start);
-            ps.setObject(6, end);
-            ps.setObject(7, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
-            ps.setString(8,"User");
-            ps.setObject(9, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
-            ps.setString(10,"User");
-            ps.setInt(11, customerID);
-            ps.setInt(12,userID);
-            ps.setInt(13,contactID);
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.setInt(1,currentAppointmentID);
+            ps.setString(2, title);
+            ps.setString(3, description);
+            ps.setString(4, location);
+            ps.setString(5, type);
+            ps.setObject(6, start);
+            ps.setObject(7, end);
+            ps.setObject(8, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
+            ps.setString(9,"User");
+            ps.setObject(10, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
+            ps.setString(11,"User");
+            ps.setInt(12, customerID);
+            ps.setInt(13,userID);
+            ps.setInt(14,contactID);
             ps.execute();
+            currentAppointmentID++;
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
