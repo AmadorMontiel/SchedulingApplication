@@ -118,12 +118,10 @@ public class AppointmentDaoImpl {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
 
-                if(!USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate())) {
-                    System.out.println("Different Dates");
-                    return false;
+                if(USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate())) {
+                    return true;
                 }
-
-                if(USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                else if(USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                     USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
                     System.out.println("Appointment falls in the middle of another appointment");
                     return true;
