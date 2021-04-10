@@ -93,14 +93,13 @@ public class AddAppointmentController {
         ZonedDateTime currentEndTime = end.atZone(localTimeZone);
 
         ZonedDateTime ESTStartTime = currentStartTime.withZoneSameInstant(easternTimeZone);
-        LocalTime eststarting = ESTStartTime.toLocalTime();
+        LocalTime estStarting = ESTStartTime.toLocalTime();
         ZonedDateTime ESTEndTime = currentEndTime.withZoneSameInstant(easternTimeZone);
-        LocalTime estending = ESTEndTime.toLocalTime();
+        LocalTime estEnding = ESTEndTime.toLocalTime();
 
-        if (eststarting.isAfter(businessOpenTime.minusSeconds(1)) && estending.isBefore(businessCloseTime.plusSeconds(1))) {
+        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) {
             System.out.println("This should return true.");
-            return true;
-
+            return !AppointmentDaoImpl.isOverlappingAppointment(start, end, customerComboBox.getSelectionModel().getSelectedItem().getId());
         } else {
             System.out.println("this should return false;");
             return false;

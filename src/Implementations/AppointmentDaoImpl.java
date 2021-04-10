@@ -5,9 +5,9 @@ import Utility.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javax.xml.transform.Result;
 import java.sql.*;
-import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class AppointmentDaoImpl {
@@ -77,6 +77,7 @@ public class AppointmentDaoImpl {
         }
 
     }
+
     public static int getAssociatedAppointments(int customerID) {
 
         int associatedAppointmentsCounter = 0;
@@ -92,5 +93,57 @@ public class AppointmentDaoImpl {
             throwables.printStackTrace();
         }
         return associatedAppointmentsCounter;
+    }
+
+    public static boolean isOverlappingAppointment(LocalDateTime start, LocalDateTime end, int customerID) {
+
+        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
+        ZoneId UTC = ZoneId.of("UTC");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ZonedDateTime currentStartTime = start.atZone(localTimeZone);
+        ZonedDateTime currentEndTime = end.atZone(localTimeZone);
+
+        ZonedDateTime USTStartTimeAndDate = currentStartTime.withZoneSameInstant(UTC);
+        LocalTime USTStartingTime = USTStartTimeAndDate.toLocalTime();
+        LocalDate USTStartDate = USTStartTimeAndDate.toLocalDate();
+
+        ZonedDateTime USTEndTimeAndDate = currentEndTime.withZoneSameInstant(UTC);
+        LocalTime USTEndingTime = USTEndTimeAndDate.toLocalTime();
+        LocalDate USTEndDate = USTEndTimeAndDate.toLocalDate();
+
+        try {
+            String sql = "SELECT Start, End FROM appointments where Customer_ID = " + customerID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+
+                if(!USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate())) {
+                    System.out.println("Different Dates");
+                    return false;
+                }
+
+                if(USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                    USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                    System.out.println("Appointment falls in the middle of another appointment");
+                    return true;
+                }
+                else if(USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                        (USTEndingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                                USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()))) {
+                    System.out.println("Start time is before another appointment. End time is in the middle of another appointment.");
+                    return true;
+                }
+                else if((USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                        USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) &&
+                        USTEndingTime.isAfter(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                    System.out.println("Start time is in middle of another appointment. End is after the end of another appointment.");
+                    return true;
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
     }
 }
