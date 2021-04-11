@@ -72,6 +72,10 @@ public class AddAppointmentController {
         endDateAndTime = LocalDateTime.of(endDateTimePicker.getValue(), endTimeComboBox.getValue());
 
         if(isAllowableTime(startDateAndTime, endDateAndTime)) {
+
+            startDateAndTime = UTCConversion(startDateAndTime);
+            endDateAndTime = UTCConversion(endDateAndTime);
+
             AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
                     locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
                     customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
@@ -112,6 +116,16 @@ public class AddAppointmentController {
             System.out.println("Time does not work.");
             return false;
         }
+    }
+
+    public LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
+        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
+        ZoneId UTC = ZoneId.of("UTC");
+
+        ZonedDateTime currentConvertedTime = timeToConvert.atZone(localTimeZone);
+        ZonedDateTime UTCConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(UTC);
+
+        return LocalDateTime.from(UTCConvertedTimeAndDate);
     }
 
     /**

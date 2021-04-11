@@ -117,26 +117,26 @@ public class AppointmentDaoImpl {
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                if(USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate()) &&
+                        USTEndDate.isEqual(LocalDateTime.parse(rs.getString("End"), dtf).toLocalDate())) {
+                    System.out.println("Date matches date of another appointment.");
+                    System.out.println("Continuing to check the times");
+                    System.out.println(USTStartingTime);
+                    System.out.println(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
 
-                if(USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate())) {
-                    return true;
-                }
-                else if(USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                    USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                    System.out.println("Appointment falls in the middle of another appointment");
-                    return true;
-                }
-                else if(USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                        (USTEndingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                                USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()))) {
-                    System.out.println("Start time is before another appointment. End time is in the middle of another appointment.");
-                    return true;
-                }
-                else if((USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                        USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) &&
-                        USTEndingTime.isAfter(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                    System.out.println("Start time is in middle of another appointment. End is after the end of another appointment.");
-                    return true;
+
+                    if (USTStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
+                        System.out.println("Start time matches another appointment.");
+                        return true;
+                    } else if (USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                            USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                        System.out.println("Ending time conflicts.");
+                        return true;
+                    } else if (USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                            USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                        System.out.println("Starting time conflicts.");
+                        return true;
+                    }
                 }
             }
         } catch (SQLException throwables) {
