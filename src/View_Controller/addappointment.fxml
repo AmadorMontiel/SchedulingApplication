@@ -36,8 +36,8 @@
                   <TextField fx:id="locationTextField" />
                   <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
                   <TextField fx:id="typeTextField" />
-                  <DatePicker fx:id="startDateTimePicker" />
-                  <DatePicker fx:id="endDateTimePicker" />
+                  <DatePicker fx:id="startDatePicker" />
+                  <DatePicker fx:id="endDatePicker" />
                   <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
                   <ComboBox fx:id="userComboBox" prefWidth="150.0" />
                </children>

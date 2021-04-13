@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="522.0" prefWidth="567.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddAppointmentController">
+<AnchorPane prefHeight="522.0" prefWidth="567.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.UpdateAppointmentController">
     <children>
         <Pane layoutX="15.0" layoutY="13.0" prefHeight="501.0" prefWidth="544.0">
             <children>
@@ -36,13 +36,13 @@
                         <TextField fx:id="locationTextField" />
                         <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
                         <ComboBox fx:id="typeComboBox" prefWidth="150.0" />
-                        <DatePicker fx:id="startDateTimePicker" />
-                        <DatePicker fx:id="endDateTimePicker" />
+                        <DatePicker fx:id="startDatePicker" />
+                        <DatePicker fx:id="endDatePicker" />
                         <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
                         <ComboBox fx:id="userComboBox" prefWidth="150.0" />
                     </children>
                 </VBox>
-                <Button layoutX="387.0" layoutY="471.0" mnemonicParsing="false" onMouseClicked="#saveNewAppointment" text="Save" />
+                <Button layoutX="387.0" layoutY="471.0" mnemonicParsing="false" onMouseClicked="#saveUpdatedAppointment" text="Save" />
                 <ComboBox layoutX="387.0" layoutY="264.0" prefWidth="150.0" />
                 <ComboBox layoutX="387.0" layoutY="298.0" prefWidth="150.0" />
                 <Label layoutX="307.0" layoutY="268.0" text="Start TIme" />

@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -36,8 +37,8 @@ public class AddAppointmentController {
     public LocalDateTime startDateAndTime;
     public LocalDateTime endDateAndTime;
 
-    public DatePicker startDateTimePicker;
-    public DatePicker endDateTimePicker;
+    public DatePicker startDatePicker;
+    public DatePicker endDatePicker;
 
     public ComboBox<Contact> contactComboBox;
     public ComboBox<Customer> customerComboBox;
@@ -45,10 +46,12 @@ public class AddAppointmentController {
     public ComboBox<LocalTime> startTimeComboBox;
     public ComboBox<LocalTime> endTimeComboBox;
 
+    public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
-    private ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
-    private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-    private ObservableList<User> userObservableList = UserDaoImpl.getAllUsers();
+
+    private final ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
+    private final ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
+    private final ObservableList<User> userObservableList = UserDaoImpl.getAllUsers();
 
     public void initialize() {
 
@@ -67,24 +70,33 @@ public class AddAppointmentController {
     }
 
     public void saveNewAppointment() {
+        if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
+            descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
+            customerComboBox.getSelectionModel().getSelectedItem() == null || userComboBox.getSelectionModel().getSelectedItem() == null ||
+            contactComboBox.getSelectionModel().getSelectedItem() == null) {
 
-        startDateAndTime = LocalDateTime.of(startDateTimePicker.getValue(), startTimeComboBox.getValue());
-        endDateAndTime = LocalDateTime.of(endDateTimePicker.getValue(), endTimeComboBox.getValue());
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Invalid Input");
+            errorAlert.setContentText("All information must be filled out.");
+            errorAlert.show();
 
-        if(isAllowableTime(startDateAndTime, endDateAndTime)) {
+        } else {
+            startDateAndTime = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
+            endDateAndTime = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
 
-            startDateAndTime = UTCConversion(startDateAndTime);
-            endDateAndTime = UTCConversion(endDateAndTime);
+            if(isAllowableTime(startDateAndTime, endDateAndTime)) {
 
-            AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
-                    locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
-                    customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
-                    contactComboBox.getSelectionModel().getSelectedItem().getContactID());
+                startDateAndTime = UTCConversion(startDateAndTime);
+                endDateAndTime = UTCConversion(endDateAndTime);
+
+                AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
+                        locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
+                        customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
+                        contactComboBox.getSelectionModel().getSelectedItem().getContactID());
+            }
         }
-
     }
 
-    //TODO Add in check to see if appointment times overlap
     public boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
 
         LocalTime businessOpenTime = LocalTime.of(8,0);

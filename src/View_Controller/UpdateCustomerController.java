@@ -63,6 +63,7 @@ public class UpdateCustomerController {
         firstLevelDivisionComboBox.setValue(null);
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
     }
+
     public void receiveCustomer(Customer selectedCustomer) {
         tempCustomer = selectedCustomer;
 

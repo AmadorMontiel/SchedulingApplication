@@ -36,6 +36,7 @@ public class MainWindowController {
         customersComboBox.setItems(customerObservableList);
         appointmentsComboBox.setItems(appointmentsObservableList);
     }
+
     /**
      * Closes the application
      */
@@ -88,7 +89,7 @@ public class MainWindowController {
         } else {
             errorAlert.setTitle("Error");
             errorAlert.setHeaderText("No Customer Selected");
-            errorAlert.setContentText("Please select a customer to update");
+            errorAlert.setContentText("Please select a customer to update.");
             errorAlert.show();
         }
     }
@@ -133,8 +134,18 @@ public class MainWindowController {
         sceneLoader(event, "addappointment.fxml");
     }
 
-    public void updateAppointmentClicked(MouseEvent event) {
-        sceneLoader(event, "updateappointment.fxml");
+    public void updateAppointmentClicked(MouseEvent event) throws IOException {
+        FXMLLoader loader = getFxmlLoader("udpateappointment.fxml");
+
+        UpdateAppointmentController uAController = loader.getController();
+        if(appointmentsComboBox.getSelectionModel().getSelectedItem() != null) {
+            uAController.receiveAppointment(appointmentsComboBox.getSelectionModel().getSelectedItem());
+            loadNewScene(event, loader);
+        } else {
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("No Appointment Selected");
+            errorAlert.setContentText("Please select an appointment to update.");
+        }
     }
 
     public void deleteAppointmentClicked(MouseEvent event) {
