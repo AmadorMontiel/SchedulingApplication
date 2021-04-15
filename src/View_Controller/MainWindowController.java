@@ -27,14 +27,11 @@ public class MainWindowController {
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
     public Stage stage;
-    private Scene scene;
-    private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-    private ObservableList<Appointment> appointmentsObservableList = AppointmentDaoImpl.getAllAppointments();
 
     public void initialize() {
 
-        customersComboBox.setItems(customerObservableList);
-        appointmentsComboBox.setItems(appointmentsObservableList);
+        customersComboBox.setItems(CustomerDaoImpl.getAllCustomers());
+        appointmentsComboBox.setItems(AppointmentDaoImpl.getAllAppointments());
     }
 
     /**
@@ -149,7 +146,32 @@ public class MainWindowController {
     }
 
     public void deleteAppointmentClicked(MouseEvent event) {
-        sceneLoader(event, "deleteappointment.fxml");
+        if(appointmentsComboBox.getSelectionModel().getSelectedItem() != null) {
+            deletionConfirmationAlert.setTitle("Confirmation");
+            deletionConfirmationAlert.setHeaderText("Confirm Appointment Deletion");
+            deletionConfirmationAlert.setContentText("Are you sure you want to delete Appointment: "
+                    + appointmentsComboBox.getSelectionModel().getSelectedItem().getTitle());
+            deletionConfirmationAlert.showAndWait();
+
+            if (deletionConfirmationAlert.getResult() == ButtonType.OK) {
+                try {
+                    AppointmentDaoImpl.deleteAppointment(appointmentsComboBox.getSelectionModel().getSelectedItem().getAppointmentID());
+                    deletionConfirmedAlert.setTitle("Deletion Confirmed");
+                    deletionConfirmedAlert.setHeaderText("Appointment Deleted");
+                    deletionConfirmedAlert.setContentText(appointmentsComboBox.getSelectionModel().getSelectedItem().toString() + " has been deleted!");
+                    deletionConfirmedAlert.show();
+                    appointmentsComboBox.getItems().remove(appointmentsComboBox.getSelectionModel().getSelectedItem());
+
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("No Appointment Selected");
+            errorAlert.setContentText("Please select an appointment to delete");
+            errorAlert.show();
+        }
     }
 
     public void viewAppointmentsClicked(MouseEvent event) {

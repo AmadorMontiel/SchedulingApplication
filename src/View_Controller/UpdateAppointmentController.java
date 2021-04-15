@@ -66,7 +66,6 @@ public class UpdateAppointmentController {
         startTimeComboBox.getItems().add(LocalTime.of(23,45));
         endTimeComboBox.getItems().add(LocalTime.of(23,45));
     }
-
     /**
      * Closes the add appointment screen and takes the use back to the main screen.
      * @param event Clicking the "Save" or "cancel" button
@@ -103,6 +102,7 @@ public class UpdateAppointmentController {
 
 
     }
+
     public void saveUpdatedAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
                 descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
@@ -123,7 +123,7 @@ public class UpdateAppointmentController {
                 startDateAndTime = UTCConversion(startDateAndTime);
                 endDateAndTime = UTCConversion(endDateAndTime);
 
-                AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
+                AppointmentDaoImpl.modifyAppointment(Integer.parseInt(appointmentIDTextField.getText()), titleTextField.getText(), descriptionTextField.getText(),
                         locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
                         customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
                         contactComboBox.getSelectionModel().getSelectedItem().getContactID());
@@ -131,6 +131,7 @@ public class UpdateAppointmentController {
             }
         }
     }
+
     private LocalTime localTimeConversion(LocalDateTime timeToConvert) {
 
         ZoneId UTC = ZoneId.of("UTC");
@@ -177,7 +178,10 @@ public class UpdateAppointmentController {
             System.out.println("The Time works");
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
             {
-                System.out.println("There is an overlapping appointment.");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Invalid Input");
+                errorAlert.setContentText("There is an overlapping appointment.");
+                errorAlert.show();
                 return false;
             }
             else {
@@ -185,7 +189,10 @@ public class UpdateAppointmentController {
                 return true;
             }
         } else {
-            System.out.println("Time does not work.");
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Invalid Input");
+            errorAlert.setContentText("Time falls outside of business hours.");
+            errorAlert.show();
             return false;
         }
     }

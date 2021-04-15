@@ -77,6 +77,43 @@ public class AppointmentDaoImpl {
 
     }
 
+    public static void modifyAppointment(int id, String title, String description, String location, String type,
+                                         LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?" +
+                ", Start = ?, End = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, " +
+                "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = " + id;
+
+        try(PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setObject(5, start);
+            ps.setObject(6, end);
+            ps.setObject(7, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
+            ps.setString(8, "User");
+            ps.setObject(9, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
+            ps.setString(10, "User");
+            ps.setInt(11, customerID);
+            ps.setInt(12, userID);
+            ps.setInt(13, contactID);
+            ps.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public static void deleteAppointment(int appointmentID) {
+        try {
+            String sql = "DELETE FROM appointments WHERE Appointment_ID = " + appointmentID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     public static int getAssociatedAppointments(int customerID) {
 
         int associatedAppointmentsCounter = 0;
