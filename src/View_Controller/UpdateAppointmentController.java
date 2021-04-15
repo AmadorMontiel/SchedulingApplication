@@ -1,10 +1,18 @@
 package View_Controller;
 
 import DataModel.Appointment;
+import DataModel.Contact;
+import DataModel.Customer;
+import DataModel.User;
+import Implementations.AppointmentDaoImpl;
+import Implementations.ContactDaoImpl;
+import Implementations.CustomerDaoImpl;
+import Implementations.UserDaoImpl;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -12,18 +20,52 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 
 public class UpdateAppointmentController {
     public TextField appointmentIDTextField;
     public TextField titleTextField;
     public TextField descriptionTextField;
     public TextField locationTextField;
-    public ComboBox contactComboBox;
-    public ComboBox typeComboBox;
+    public TextField typeTextField;
+
     public DatePicker startDatePicker;
     public DatePicker endDatePicker;
-    public ComboBox customerComboBox;
-    public ComboBox userComboBox;
+
+    public LocalTime startTime = LocalTime.MIDNIGHT;
+    public LocalTime endTime = LocalTime.of(23,44);
+    public LocalDateTime startDateAndTime;
+    public LocalDateTime endDateAndTime;
+
+    public ComboBox<Contact> contactComboBox;
+    public ComboBox<Customer> customerComboBox;
+    public ComboBox<User> userComboBox;
+    public ComboBox<LocalTime> startTimeComboBox;
+    public ComboBox<LocalTime> endTimeComboBox;
+
+    public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+
+    private Contact contact;
+    private Customer customer;
+    private User user;
+
+    public void initialize() {
+        contactComboBox.setItems(ContactDaoImpl.getAllContacts());
+        customerComboBox.setItems(CustomerDaoImpl.getAllCustomers());
+        userComboBox.setItems(UserDaoImpl.getAllUsers());
+
+        while (startTime.isBefore(endTime.plusSeconds(1))) {
+            startTimeComboBox.getItems().add(startTime);
+            endTimeComboBox.getItems().add(startTime);
+            startTime = startTime.plusMinutes(15);
+        }
+        startTimeComboBox.getItems().add(LocalTime.of(23,45));
+        endTimeComboBox.getItems().add(LocalTime.of(23,45));
+    }
 
     /**
      * Closes the add appointment screen and takes the use back to the main screen.
@@ -42,10 +84,110 @@ public class UpdateAppointmentController {
         stage.show();
     }
 
-    public void receiveAppointment(Appointment selectedItem) {
-        
+    public void receiveAppointment(Appointment selectedAppointment) {
+
+        appointmentIDTextField.setText(String.valueOf((selectedAppointment.getAppointmentID())));
+        titleTextField.setText(selectedAppointment.getTitle());
+        descriptionTextField.setText(selectedAppointment.getDescription());
+        locationTextField.setText(selectedAppointment.getLocation());
+        typeTextField.setText(selectedAppointment.getType());
+        startDatePicker.setValue(selectedAppointment.getStart().toLocalDate());
+        endDatePicker.setValue(selectedAppointment.getEnd().toLocalDate());
+        startTimeComboBox.setValue(localTimeConversion(selectedAppointment.getStart()));
+        endTimeComboBox.setValue(localTimeConversion(selectedAppointment.getEnd()));
+
+        getComboBoxItems(selectedAppointment);
+        contactComboBox.setValue(contact);
+        customerComboBox.setValue(customer);
+        userComboBox.setValue(user);
+
+
+    }
+    public void saveUpdatedAppointment(MouseEvent event) throws IOException {
+        if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
+                descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
+                customerComboBox.getSelectionModel().getSelectedItem() == null || userComboBox.getSelectionModel().getSelectedItem() == null ||
+                contactComboBox.getSelectionModel().getSelectedItem() == null) {
+
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Invalid Input");
+            errorAlert.setContentText("All information must be filled out.");
+            errorAlert.show();
+
+        } else {
+            startDateAndTime = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
+            endDateAndTime = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
+
+            if(isAllowableTime(startDateAndTime, endDateAndTime)) {
+
+                startDateAndTime = UTCConversion(startDateAndTime);
+                endDateAndTime = UTCConversion(endDateAndTime);
+
+                AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
+                        locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
+                        customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
+                        contactComboBox.getSelectionModel().getSelectedItem().getContactID());
+                close(event);
+            }
+        }
+    }
+    private LocalTime localTimeConversion(LocalDateTime timeToConvert) {
+
+        ZoneId UTC = ZoneId.of("UTC");
+        ZoneId localTimeZone = ZoneId.systemDefault();
+        ZonedDateTime currentConvertedTime = timeToConvert.atZone(UTC);
+        ZonedDateTime localConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(localTimeZone);
+
+        return localConvertedTimeAndDate.toLocalDateTime().toLocalTime();
     }
 
-    public void saveUpdatedAppointment(MouseEvent event) {
+    private LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
+        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
+        ZoneId UTC = ZoneId.of("UTC");
+
+        ZonedDateTime currentConvertedTime = timeToConvert.atZone(localTimeZone);
+        ZonedDateTime UTCConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(UTC);
+
+        return LocalDateTime.from(UTCConvertedTimeAndDate);
     }
+
+    private void getComboBoxItems (Appointment selectedAppointment) {
+        contact = ContactDaoImpl.getContactByID(selectedAppointment.getContactID());
+        customer = CustomerDaoImpl.getCustomerByID(selectedAppointment.getCustomerID());
+        user = UserDaoImpl.getUserByID(selectedAppointment.getUserID());
+    }
+
+    private boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
+
+        LocalTime businessOpenTime = LocalTime.of(8,0);
+        LocalTime businessCloseTime = LocalTime.of(22,0);
+
+        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
+        ZoneId easternTimeZone = ZoneId.of("America/New_York");
+
+        ZonedDateTime currentStartTime = start.atZone(localTimeZone);
+        ZonedDateTime currentEndTime = end.atZone(localTimeZone);
+
+        ZonedDateTime ESTStartTime = currentStartTime.withZoneSameInstant(easternTimeZone);
+        LocalTime estStarting = ESTStartTime.toLocalTime();
+        ZonedDateTime ESTEndTime = currentEndTime.withZoneSameInstant(easternTimeZone);
+        LocalTime estEnding = ESTEndTime.toLocalTime();
+
+        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) {
+            System.out.println("The Time works");
+            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
+            {
+                System.out.println("There is an overlapping appointment.");
+                return false;
+            }
+            else {
+                System.out.println("No overlapping appointments.");
+                return true;
+            }
+        } else {
+            System.out.println("Time does not work.");
+            return false;
+        }
+    }
+
 }

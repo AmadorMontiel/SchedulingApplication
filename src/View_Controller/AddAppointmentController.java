@@ -30,8 +30,6 @@ public class AddAppointmentController {
     public TextField locationTextField;
     public TextField typeTextField;
 
-    public LocalDate startDate;
-    public LocalDate endDate;
     public LocalTime startTime = LocalTime.MIDNIGHT;
     public LocalTime endTime = LocalTime.of(23,44);
     public LocalDateTime startDateAndTime;
@@ -51,13 +49,12 @@ public class AddAppointmentController {
 
     private final ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
     private final ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-    private final ObservableList<User> userObservableList = UserDaoImpl.getAllUsers();
 
     public void initialize() {
 
-        contactComboBox.setItems(contactObservableList);
-        customerComboBox.setItems(customerObservableList);
-        userComboBox.setItems(userObservableList);
+        contactComboBox.setItems(ContactDaoImpl.getAllContacts());
+        customerComboBox.setItems(CustomerDaoImpl.getAllCustomers());
+        userComboBox.setItems(UserDaoImpl.getAllUsers());
         appointmentIDTextField.setText(String.valueOf(AppointmentDaoImpl.currentAppointmentID));
 
         while (startTime.isBefore(endTime.plusSeconds(1))) {
@@ -69,7 +66,7 @@ public class AddAppointmentController {
         endTimeComboBox.getItems().add(LocalTime.of(23,45));
     }
 
-    public void saveNewAppointment() {
+    public void saveNewAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
             descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
             customerComboBox.getSelectionModel().getSelectedItem() == null || userComboBox.getSelectionModel().getSelectedItem() == null ||
@@ -93,11 +90,12 @@ public class AddAppointmentController {
                         locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
                         customerComboBox.getSelectionModel().getSelectedItem().getId(), userComboBox.getSelectionModel().getSelectedItem().getUserID(),
                         contactComboBox.getSelectionModel().getSelectedItem().getContactID());
+                close(event);
             }
         }
     }
 
-    public boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
+    private boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
 
         LocalTime businessOpenTime = LocalTime.of(8,0);
         LocalTime businessCloseTime = LocalTime.of(22,0);
@@ -130,7 +128,7 @@ public class AddAppointmentController {
         }
     }
 
-    public LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
+    private LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
         ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
         ZoneId UTC = ZoneId.of("UTC");
 

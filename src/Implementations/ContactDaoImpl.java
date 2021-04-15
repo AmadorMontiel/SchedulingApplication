@@ -42,4 +42,22 @@ public class ContactDaoImpl {
         }
         return contacts;
     }
+    public static Contact getContactByID(int contactID) {
+        Contact contact = null;
+
+        try {
+            String sql = "SELECT * FROM contacts WHERE Contact_ID = " + contactID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                int id = rs.getInt("Contact_ID");
+                String name = rs.getString("Contact_Name");
+                contact = new Contact(id,name);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return contact;
+    }
 }

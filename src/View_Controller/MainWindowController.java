@@ -135,7 +135,7 @@ public class MainWindowController {
     }
 
     public void updateAppointmentClicked(MouseEvent event) throws IOException {
-        FXMLLoader loader = getFxmlLoader("udpateappointment.fxml");
+        FXMLLoader loader = getFxmlLoader("updateappointment.fxml");
 
         UpdateAppointmentController uAController = loader.getController();
         if(appointmentsComboBox.getSelectionModel().getSelectedItem() != null) {

@@ -35,7 +35,7 @@
                         <TextField fx:id="descriptionTextField" />
                         <TextField fx:id="locationTextField" />
                         <ComboBox fx:id="contactComboBox" prefWidth="150.0" />
-                        <ComboBox fx:id="typeComboBox" prefWidth="150.0" />
+                  <TextField fx:id="typeTextField" />
                         <DatePicker fx:id="startDatePicker" />
                         <DatePicker fx:id="endDatePicker" />
                         <ComboBox fx:id="customerComboBox" prefWidth="150.0" />
@@ -43,10 +43,18 @@
                     </children>
                 </VBox>
                 <Button layoutX="387.0" layoutY="471.0" mnemonicParsing="false" onMouseClicked="#saveUpdatedAppointment" text="Save" />
-                <ComboBox layoutX="387.0" layoutY="264.0" prefWidth="150.0" />
-                <ComboBox layoutX="387.0" layoutY="298.0" prefWidth="150.0" />
-                <Label layoutX="307.0" layoutY="268.0" text="Start TIme" />
-                <Label layoutX="307.0" layoutY="302.0" text="End Time" />
+            <VBox layoutX="387.0" layoutY="256.0" spacing="10.0">
+               <children>
+                      <ComboBox fx:id="startTimeComboBox" prefWidth="150.0" />
+                      <ComboBox fx:id="endTimeComboBox" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox layoutX="306.0" layoutY="260.0" spacing="18.0">
+               <children>
+                      <Label text="Start Time" />
+                      <Label text="End Time" />
+               </children>
+            </VBox>
             </children>
         </Pane>
     </children>

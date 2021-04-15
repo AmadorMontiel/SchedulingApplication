@@ -63,4 +63,23 @@ public class UserDaoImpl {
         }
         return users;
     }
+
+    public static User getUserByID(int userID) {
+        User user = null;
+
+        try {
+            String sql = "SELECT * FROM users WHERE User_ID = " + userID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                int id = rs.getInt("User_ID");
+                String name = rs.getString("User_Name");
+                user = new User(id,name,null);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return user;
+    }
 }

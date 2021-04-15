@@ -3,6 +3,7 @@ package Implementations;
 import DataModel.Appointment;
 import DataModel.Customer;
 import Utility.DBConnection;
+import com.mysql.cj.protocol.Resultset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
@@ -106,14 +107,31 @@ public class CustomerDaoImpl {
         }
     }
 
-    public static void deleteCustomer(int ID) {
+    public static void deleteCustomer(int customerID) {
         try {
-            String sql = "DELETE FROM customers WHERE Customer_ID = " + ID;
+            String sql = "DELETE FROM customers WHERE Customer_ID = " + customerID;
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+    public static Customer getCustomerByID(int customerID) {
+        Customer customer = null;
 
+        try {
+            String sql = "SELECT * FROM customers WHERE Customer_ID = " + customerID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                customer = new Customer(id, name,null,null,null,-1);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return customer;
     }
 }
