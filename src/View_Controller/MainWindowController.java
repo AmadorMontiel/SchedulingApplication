@@ -5,6 +5,7 @@ import DataModel.Customer;
 import DataModel.User;
 import Implementations.AppointmentDaoImpl;
 import Implementations.CustomerDaoImpl;
+import Utility.TimeConversion;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -190,11 +191,18 @@ public class MainWindowController {
     public void receiveUser(User userLoggedIn) {
         loggedInUser = userLoggedIn;
         associatedAppointmentsWithUser = AppointmentDaoImpl.getAppointmentsAssociatedWithUser(loggedInUser.getUserID());
-        for (Appointment appointments : associatedAppointmentsWithUser) {
-            if(AppointmentDaoImpl.isAppointmentWithin15Minutes(appointments.getAppointmentID())) {
-                System.out.println("Appointment was within 15 minutes of logging in!");
+        for (Appointment appointment : associatedAppointmentsWithUser) {
+            if(AppointmentDaoImpl.isAppointmentWithin15Minutes(appointment.getAppointmentID())) {
+                appointmentAlert.setTitle("Alert");
+                appointmentAlert.setHeaderText("Appointment Coming Up!");
+                appointmentAlert.setContentText("Appointment ID: " + appointment.getAppointmentID()
+                        + " Date/Time: " + TimeConversion.localTimeConversion(appointment.getStart()));
+                appointmentAlert.show();
             } else {
-                System.out.println("Appointment was not within 15 minutes");
+                appointmentAlert.setTitle("Alert");
+                appointmentAlert.setHeaderText("No Upcoming Appointments");
+                appointmentAlert.setContentText("There are no upcoming appointments for the user!");
+                appointmentAlert.show();
             }
         }
     }

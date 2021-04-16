@@ -212,7 +212,8 @@ public class AppointmentDaoImpl {
                 System.out.println("Time Prior to conversion: " + appointmentStartTime);
                 appointmentStartTime = TimeConversion.localTimeConversion(appointmentStartTime);
                 System.out.println("Time After Conversion: " + appointmentStartTime);
-                if(appointmentStartTime.toLocalDate().isEqual(LocalDateTime.now().toLocalDate()) && appointmentStartTime.isBefore(LocalDateTime.now().plusMinutes(16))){
+                if(appointmentStartTime.toLocalDate().isEqual(LocalDateTime.now().toLocalDate()) && appointmentStartTime.isBefore(LocalDateTime.now().plusMinutes(16)) &&
+                !LocalDateTime.now().isAfter(appointmentStartTime.plusMinutes(1))){
                     return true;
                 }
             }

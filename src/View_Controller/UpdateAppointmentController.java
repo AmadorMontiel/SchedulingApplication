@@ -101,6 +101,7 @@ public class UpdateAppointmentController {
 
     }
 
+    //TODO Change logic to delete the appointment and re-enter it so that appointment cannot overlap itself
     public void saveUpdatedAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
                 descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
