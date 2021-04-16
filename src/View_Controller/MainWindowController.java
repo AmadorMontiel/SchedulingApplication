@@ -2,6 +2,7 @@ package View_Controller;
 
 import DataModel.Appointment;
 import DataModel.Customer;
+import DataModel.User;
 import Implementations.AppointmentDaoImpl;
 import Implementations.CustomerDaoImpl;
 import javafx.application.Platform;
@@ -23,6 +24,10 @@ public class MainWindowController {
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
     public Alert deletionConfirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
     public Alert deletionConfirmedAlert = new Alert(Alert.AlertType.INFORMATION);
+    public Alert appointmentAlert = new Alert(Alert.AlertType.INFORMATION);
+
+    public User loggedInUser;
+    public ObservableList<Appointment> associatedAppointmentsWithUser;
 
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
@@ -180,5 +185,17 @@ public class MainWindowController {
 
     public void reportsClicked(MouseEvent event) {
         sceneLoader(event, "reports.fxml");
+    }
+
+    public void receiveUser(User userLoggedIn) {
+        loggedInUser = userLoggedIn;
+        associatedAppointmentsWithUser = AppointmentDaoImpl.getAppointmentsAssociatedWithUser(loggedInUser.getUserID());
+        for (Appointment appointments : associatedAppointmentsWithUser) {
+            if(AppointmentDaoImpl.isAppointmentWithin15Minutes(appointments.getAppointmentID())) {
+                System.out.println("Appointment was within 15 minutes of logging in!");
+            } else {
+                System.out.println("Appointment was not within 15 minutes");
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ import Implementations.AppointmentDaoImpl;
 import Implementations.ContactDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Implementations.UserDaoImpl;
+import Utility.TimeConversion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -20,10 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 
 public class UpdateAppointmentController {
@@ -92,8 +90,8 @@ public class UpdateAppointmentController {
         typeTextField.setText(selectedAppointment.getType());
         startDatePicker.setValue(selectedAppointment.getStart().toLocalDate());
         endDatePicker.setValue(selectedAppointment.getEnd().toLocalDate());
-        startTimeComboBox.setValue(localTimeConversion(selectedAppointment.getStart()));
-        endTimeComboBox.setValue(localTimeConversion(selectedAppointment.getEnd()));
+        startTimeComboBox.setValue(TimeConversion.localTimeConversion(selectedAppointment.getStart()).toLocalTime());
+        endTimeComboBox.setValue(TimeConversion.localTimeConversion(selectedAppointment.getEnd()).toLocalTime());
 
         getComboBoxItems(selectedAppointment);
         contactComboBox.setValue(contact);
@@ -120,8 +118,8 @@ public class UpdateAppointmentController {
 
             if(isAllowableTime(startDateAndTime, endDateAndTime)) {
 
-                startDateAndTime = UTCConversion(startDateAndTime);
-                endDateAndTime = UTCConversion(endDateAndTime);
+                startDateAndTime = TimeConversion.UTCConversion(startDateAndTime);
+                endDateAndTime = TimeConversion.UTCConversion(endDateAndTime);
 
                 AppointmentDaoImpl.modifyAppointment(Integer.parseInt(appointmentIDTextField.getText()), titleTextField.getText(), descriptionTextField.getText(),
                         locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
@@ -130,26 +128,6 @@ public class UpdateAppointmentController {
                 close(event);
             }
         }
-    }
-
-    private LocalTime localTimeConversion(LocalDateTime timeToConvert) {
-
-        ZoneId UTC = ZoneId.of("UTC");
-        ZoneId localTimeZone = ZoneId.systemDefault();
-        ZonedDateTime currentConvertedTime = timeToConvert.atZone(UTC);
-        ZonedDateTime localConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(localTimeZone);
-
-        return localConvertedTimeAndDate.toLocalDateTime().toLocalTime();
-    }
-
-    private LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
-        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
-        ZoneId UTC = ZoneId.of("UTC");
-
-        ZonedDateTime currentConvertedTime = timeToConvert.atZone(localTimeZone);
-        ZonedDateTime UTCConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(UTC);
-
-        return LocalDateTime.from(UTCConvertedTimeAndDate);
     }
 
     private void getComboBoxItems (Appointment selectedAppointment) {
@@ -171,10 +149,12 @@ public class UpdateAppointmentController {
 
         ZonedDateTime ESTStartTime = currentStartTime.withZoneSameInstant(easternTimeZone);
         LocalTime estStarting = ESTStartTime.toLocalTime();
+        LocalDate estStartDate = ESTStartTime.toLocalDate();
         ZonedDateTime ESTEndTime = currentEndTime.withZoneSameInstant(easternTimeZone);
         LocalTime estEnding = ESTEndTime.toLocalTime();
+        LocalDate estEndDate = ESTEndTime.toLocalDate();
 
-        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) {
+        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && estStartDate.isEqual(estEndDate)) {
             System.out.println("The Time works");
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
             {

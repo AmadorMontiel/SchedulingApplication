@@ -75,6 +75,12 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+    public Appointment(int appointmentID, LocalDateTime start, int userID){
+        this.appointmentID = appointmentID;
+        this.start = start;
+        this.userID = userID;
+    }
+
     /**
      * Gets the appointment ID.
      * @return the appointment ID.

@@ -7,7 +7,7 @@ import Implementations.AppointmentDaoImpl;
 import Implementations.ContactDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Implementations.UserDaoImpl;
-import javafx.collections.ObservableList;
+import Utility.TimeConversion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -46,10 +46,6 @@ public class AddAppointmentController {
 
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
-
-    private final ObservableList<Contact> contactObservableList = ContactDaoImpl.getAllContacts();
-    private final ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-
     public void initialize() {
 
         contactComboBox.setItems(ContactDaoImpl.getAllContacts());
@@ -83,8 +79,8 @@ public class AddAppointmentController {
 
             if(isAllowableTime(startDateAndTime, endDateAndTime)) {
 
-                startDateAndTime = UTCConversion(startDateAndTime);
-                endDateAndTime = UTCConversion(endDateAndTime);
+                startDateAndTime = TimeConversion.UTCConversion(startDateAndTime);
+                endDateAndTime = TimeConversion.UTCConversion(endDateAndTime);
 
                 AppointmentDaoImpl.addAppointment(titleTextField.getText(), descriptionTextField.getText(),
                         locationTextField.getText(), typeTextField.getText(), startDateAndTime, endDateAndTime,
@@ -108,10 +104,12 @@ public class AddAppointmentController {
 
         ZonedDateTime ESTStartTime = currentStartTime.withZoneSameInstant(easternTimeZone);
         LocalTime estStarting = ESTStartTime.toLocalTime();
+        LocalDate estStartDate = ESTStartTime.toLocalDate();
         ZonedDateTime ESTEndTime = currentEndTime.withZoneSameInstant(easternTimeZone);
         LocalTime estEnding = ESTEndTime.toLocalTime();
+        LocalDate estEndDate = ESTEndTime.toLocalDate();
 
-        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) {
+        if ((estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) && estStartDate.isEqual(estEndDate)) {
             System.out.println("The Time works");
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
             {
@@ -123,19 +121,11 @@ public class AddAppointmentController {
                 return true;
             }
         } else {
+            System.out.println(estStartDate);
+            System.out.println(estEndDate);
             System.out.println("Time does not work.");
             return false;
         }
-    }
-
-    private LocalDateTime UTCConversion (LocalDateTime timeToConvert) {
-        ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
-        ZoneId UTC = ZoneId.of("UTC");
-
-        ZonedDateTime currentConvertedTime = timeToConvert.atZone(localTimeZone);
-        ZonedDateTime UTCConvertedTimeAndDate = currentConvertedTime.withZoneSameInstant(UTC);
-
-        return LocalDateTime.from(UTCConvertedTimeAndDate);
     }
 
     /**

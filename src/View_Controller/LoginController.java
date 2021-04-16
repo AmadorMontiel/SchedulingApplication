@@ -116,13 +116,9 @@ public class LoginController {
         logAppicationLogin(isValidLogin);
 
        if(isValidLogin) {
-               FXMLLoader loader = new FXMLLoader();
-               loader.setLocation(getClass().getResource("mainwindow.fxml"));
-               try {
-                   loader.load();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
+               FXMLLoader loader = getFxmlLoader();
+               MainWindowController MWController = loader.getController();
+               MWController.receiveUser(UserDaoImpl.getUserByName(usernameTextField.getText()));
                loadNewScene(event, loader);
                fw.close();
                pw.close();
@@ -186,5 +182,12 @@ public class LoginController {
         usernameLabel.setText(rb.getString("username"));
         passwordLabel.setText(rb.getString("password"));
 
+    }
+
+    private FXMLLoader getFxmlLoader() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("mainwindow.fxml"));
+        loader.load();
+        return loader;
     }
 }

@@ -2,6 +2,7 @@ package Implementations;
 
 import DataModel.Appointment;
 import Utility.DBConnection;
+import Utility.TimeConversion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,11 +13,9 @@ import java.time.format.DateTimeFormatter;
 public class AppointmentDaoImpl {
 
     public static int currentAppointmentID;
-    private static ObservableList<Appointment> appointments;
-    private static ObservableList<Appointment> associatedAppointments;
 
     public static ObservableList<Appointment> getAllAppointments() {
-        appointments = FXCollections.observableArrayList();
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         currentAppointmentID = 1;
         try {
             String sql = "SELECT * from appointments";
@@ -174,6 +173,45 @@ public class AppointmentDaoImpl {
                         return true;
                     }
                 }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsAssociatedWithUser(int userID) {
+
+        System.out.println("Get appointments associated entered.");
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT Appointment_ID, Start FROM appointments WHERE User_ID = " + userID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int appointmentID = rs.getInt("Appointment_ID");
+                LocalDateTime appointmentStartTime = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                Appointment a = new Appointment(appointmentID,appointmentStartTime,userID);
+                appointments.add(a);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return appointments;
+    }
+
+    public static boolean isAppointmentWithin15Minutes(int currentAppointmentID) {
+
+        try {
+            String sql = "SELECT Start FROM appointments WHERE Appointment_ID = " + currentAppointmentID;
+            PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                LocalDateTime appointmentStartTime = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                System.out.println(appointmentStartTime);
+                appointmentStartTime = TimeConversion.localTimeConversion(appointmentStartTime);
+                System.out.println(appointmentStartTime);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
