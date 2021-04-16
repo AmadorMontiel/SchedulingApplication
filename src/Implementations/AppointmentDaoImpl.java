@@ -209,9 +209,12 @@ public class AppointmentDaoImpl {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDateTime appointmentStartTime = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                System.out.println(appointmentStartTime);
+                System.out.println("Time Prior to conversion: " + appointmentStartTime);
                 appointmentStartTime = TimeConversion.localTimeConversion(appointmentStartTime);
-                System.out.println(appointmentStartTime);
+                System.out.println("Time After Conversion: " + appointmentStartTime);
+                if(appointmentStartTime.toLocalDate().isEqual(LocalDateTime.now().toLocalDate()) && appointmentStartTime.isBefore(LocalDateTime.now().plusMinutes(16))){
+                    return true;
+                }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
