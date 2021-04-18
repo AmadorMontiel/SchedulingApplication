@@ -8,6 +8,7 @@ import Implementations.AppointmentDaoImpl;
 import Implementations.ContactDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Implementations.UserDaoImpl;
+import Interfaces.LambdaAlert;
 import Utility.TimeConversion;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -108,12 +109,22 @@ public class UpdateAppointmentController {
                 customerComboBox.getSelectionModel().getSelectedItem() == null || userComboBox.getSelectionModel().getSelectedItem() == null ||
                 contactComboBox.getSelectionModel().getSelectedItem() == null) {
 
+            LambdaAlert alert = (Alert errorAlert) -> {
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Invalid Input");
+                errorAlert.setContentText("All information must be filled out.");
+                errorAlert.show();
+            };
+            alert.invalidInputError(errorAlert);
+            /*
             errorAlert.setTitle("Error");
             errorAlert.setHeaderText("Invalid Input");
             errorAlert.setContentText("All information must be filled out.");
             errorAlert.show();
-
+          */
         } else {
+
+
             startDateAndTime = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
             endDateAndTime = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
 
@@ -157,7 +168,7 @@ public class UpdateAppointmentController {
 
         if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && estStartDate.isEqual(estEndDate)) {
             System.out.println("The Time works");
-            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
+            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId(), Integer.parseInt(appointmentIDTextField.getText())))
             {
                 errorAlert.setTitle("Error");
                 errorAlert.setHeaderText("Invalid Input");

@@ -130,7 +130,7 @@ public class AppointmentDaoImpl {
         return associatedAppointmentsCounter;
     }
 
-    public static boolean isOverlappingAppointment(LocalDateTime start, LocalDateTime end, int customerID) {
+    public static boolean isOverlappingAppointment(LocalDateTime start, LocalDateTime end, int customerID, int currentAppointmentID) {
 
         ZoneId localTimeZone = ZoneId.of(String.valueOf(ZoneId.systemDefault()));
         ZoneId UTC = ZoneId.of("UTC");
@@ -148,7 +148,7 @@ public class AppointmentDaoImpl {
         LocalDate USTEndDate = USTEndTimeAndDate.toLocalDate();
 
         try {
-            String sql = "SELECT Start, End FROM appointments where Customer_ID = " + customerID;
+            String sql = "SELECT Start, End, Appointment_ID FROM appointments where Customer_ID = " + customerID;
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -159,8 +159,10 @@ public class AppointmentDaoImpl {
                     System.out.println(USTStartingTime);
                     System.out.println(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
 
-
-                    if (USTStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
+                    if (rs.getInt("Appointment_ID") == currentAppointmentID) {
+                        return false;
+                    }
+                    else if (USTStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
                         System.out.println("Start time matches another appointment.");
                         return true;
                     } else if (USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
@@ -181,8 +183,6 @@ public class AppointmentDaoImpl {
     }
 
     public static ObservableList<Appointment> getAppointmentsAssociatedWithUser(int userID) {
-
-        System.out.println("Get appointments associated entered.");
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
         try {

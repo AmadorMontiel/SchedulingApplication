@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
@@ -33,20 +34,25 @@ public class MainWindowController {
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
     public Stage stage;
+    public Button exitButton;
 
     public void initialize() {
 
         customersComboBox.setItems(CustomerDaoImpl.getAllCustomers());
         appointmentsComboBox.setItems(AppointmentDaoImpl.getAllAppointments());
+
+        //Added lambda function to close that application on clicking Exit button
+        exitButton.setOnAction(event -> Platform.exit());
     }
 
     /**
      * Closes the application
      */
+    /*
     public void exitProgram() {
         Platform.exit();
     }
-
+*/
     private void sceneLoader(MouseEvent event, String s) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(s));

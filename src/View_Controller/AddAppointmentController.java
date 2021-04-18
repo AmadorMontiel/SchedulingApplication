@@ -111,7 +111,7 @@ public class AddAppointmentController {
 
         if ((estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) && estStartDate.isEqual(estEndDate)) {
             System.out.println("The Time works");
-            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
+            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId(), Integer.parseInt(appointmentIDTextField.getText())))
             {
                 System.out.println("There is an overlapping appointment.");
                 return false;

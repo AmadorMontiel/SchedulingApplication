@@ -1,6 +1,5 @@
 package Main;
 
-import Interfaces.GeneralInterface;
 import Utility.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -24,9 +23,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         //Locale.setDefault(new Locale("fr"));
 
-        //Value returing lambda expression
-        GeneralInterface square = n -> n*n;
+        /*Value returing lambda expression
+        GeneralInterface square = (n) -> n*n;
         System.out.println(square.calcSquare(6));
+         */
+
         DBConnection.startConnection();
         launch(args);
         DBConnection.closeConnection();
