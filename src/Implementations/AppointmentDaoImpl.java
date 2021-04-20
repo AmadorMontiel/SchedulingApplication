@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 
 public class AppointmentDaoImpl {
 
+    //TODO Change the appointmentID to pull directly from the SQL Server
+
     public static int currentAppointmentID;
 
     public static ObservableList<Appointment> getAllAppointments() {
@@ -139,39 +141,46 @@ public class AppointmentDaoImpl {
         ZonedDateTime currentStartTime = start.atZone(localTimeZone);
         ZonedDateTime currentEndTime = end.atZone(localTimeZone);
 
-        ZonedDateTime USTStartTimeAndDate = currentStartTime.withZoneSameInstant(UTC);
-        LocalTime USTStartingTime = USTStartTimeAndDate.toLocalTime();
-        LocalDate USTStartDate = USTStartTimeAndDate.toLocalDate();
+        ZonedDateTime UTCStartTimeAndDate = currentStartTime.withZoneSameInstant(UTC);
+        LocalTime UTCStartingTime = UTCStartTimeAndDate.toLocalTime();
+        LocalDate UTCStartDate = UTCStartTimeAndDate.toLocalDate();
 
-        ZonedDateTime USTEndTimeAndDate = currentEndTime.withZoneSameInstant(UTC);
-        LocalTime USTEndingTime = USTEndTimeAndDate.toLocalTime();
-        LocalDate USTEndDate = USTEndTimeAndDate.toLocalDate();
+        ZonedDateTime UTCEndTimeAndDate = currentEndTime.withZoneSameInstant(UTC);
+        LocalTime UTCEndingTime = UTCEndTimeAndDate.toLocalTime();
+        LocalDate UTCEndDate = UTCEndTimeAndDate.toLocalDate();
 
         try {
             String sql = "SELECT Start, End, Appointment_ID FROM appointments where Customer_ID = " + customerID;
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                if(USTStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate()) &&
-                        USTEndDate.isEqual(LocalDateTime.parse(rs.getString("End"), dtf).toLocalDate())) {
-                    System.out.println("Date matches date of another appointment.");
-                    System.out.println("Continuing to check the times");
-                    System.out.println(USTStartingTime);
-                    System.out.println(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
+                if(UTCStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate()) &&
+                        UTCEndDate.isEqual(LocalDateTime.parse(rs.getString("End"), dtf).toLocalDate())) {
+                    System.out.println("New Start Time Requested: " + UTCStartingTime);
+                    System.out.println("Time of Appointment Already: " + LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
 
                     if (rs.getInt("Appointment_ID") == currentAppointmentID) {
-                        return false;
+                        continue;
                     }
-                    else if (USTStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
+
+                    if (UTCStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
                         System.out.println("Start time matches another appointment.");
                         return true;
-                    } else if (USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                            USTEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                    } else if (UTCEndingTime.equals(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                        System.out.println("End time matches another appointment.");
+                        return true;
+                    } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                            (UTCEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()) &&
+                                    UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()))) {
                         System.out.println("Ending time conflicts.");
                         return true;
-                    } else if (USTStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
-                            USTStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
+                    } else if (UTCStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                            UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
                         System.out.println("Starting time conflicts.");
+                        return true;
+                    } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
+                            (UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()))) {
+                        System.out.println("New appointment start is before known start and end is after known end");
                         return true;
                     }
                 }
@@ -209,9 +218,7 @@ public class AppointmentDaoImpl {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LocalDateTime appointmentStartTime = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                System.out.println("Time Prior to conversion: " + appointmentStartTime);
                 appointmentStartTime = TimeConversion.localTimeConversion(appointmentStartTime);
-                System.out.println("Time After Conversion: " + appointmentStartTime);
                 if(appointmentStartTime.toLocalDate().isEqual(LocalDateTime.now().toLocalDate()) && appointmentStartTime.isBefore(LocalDateTime.now().plusMinutes(16)) &&
                 !LocalDateTime.now().isAfter(appointmentStartTime.plusMinutes(1))){
                     return true;

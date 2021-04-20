@@ -123,8 +123,6 @@ public class UpdateAppointmentController {
             errorAlert.show();
           */
         } else {
-
-
             startDateAndTime = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
             endDateAndTime = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
 
