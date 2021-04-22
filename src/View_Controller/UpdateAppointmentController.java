@@ -102,26 +102,25 @@ public class UpdateAppointmentController {
 
     }
 
-    //TODO Change logic to delete the appointment and re-enter it so that appointment cannot overlap itself
+    /**
+     * HAS A LAMBDA EXPRESSION
+     * @param event
+     * @throws IOException
+     */
     public void saveUpdatedAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
                 descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
                 customerComboBox.getSelectionModel().getSelectedItem() == null || userComboBox.getSelectionModel().getSelectedItem() == null ||
                 contactComboBox.getSelectionModel().getSelectedItem() == null) {
 
-            LambdaAlert alert = (Alert errorAlert) -> {
+            LambdaAlert alert = (Alert alertError) -> {
                 errorAlert.setTitle("Error");
                 errorAlert.setHeaderText("Invalid Input");
                 errorAlert.setContentText("All information must be filled out.");
                 errorAlert.show();
             };
             alert.invalidInputError(errorAlert);
-            /*
-            errorAlert.setTitle("Error");
-            errorAlert.setHeaderText("Invalid Input");
-            errorAlert.setContentText("All information must be filled out.");
-            errorAlert.show();
-          */
+
         } else {
             startDateAndTime = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
             endDateAndTime = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());

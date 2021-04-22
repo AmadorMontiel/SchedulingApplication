@@ -3,6 +3,7 @@ package Implementations;
 import DataModel.Appointment;
 import Utility.DBConnection;
 import Utility.TimeConversion;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -40,13 +41,17 @@ public class AppointmentDaoImpl {
                 appointments.add(a);
                 currentAppointmentID++;
             }
-            rs.close();
-            ps.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
 
         return appointments;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsByWeek() {
+        ObservableList<Appointment> appointmentsByWeek = FXCollections.observableArrayList();
+        return appointmentsByWeek;
     }
 
     public static void addAppointment(String title, String description, String location, String type, LocalDateTime start,
