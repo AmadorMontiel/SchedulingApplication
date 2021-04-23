@@ -4,16 +4,63 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ReportsController">
+<AnchorPane prefHeight="487.0" prefWidth="944.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.ReportsController">
    <children>
-      <Pane layoutX="14.0" layoutY="14.0" prefHeight="376.0" prefWidth="571.0">
+      <Pane layoutX="9.0" layoutY="7.0" prefHeight="592.0" prefWidth="926.0">
          <children>
-            <Label layoutX="24.0" layoutY="14.0" text="Reports">
+            <Label layoutX="417.0" layoutY="6.0" text="Reports">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Button layoutX="491.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
+            <TableView fx:id="appointmentByMonthAndTypeTable" layoutY="77.0" prefHeight="200.0" prefWidth="233.0">
+              <columns>
+                <TableColumn fx:id="monthColumn" prefWidth="71.0" text="Month" />
+                <TableColumn fx:id="typeColumn" prefWidth="98.0" text="Type" />
+                  <TableColumn fx:id="countColumn" prefWidth="63.0" text="Count" />
+              </columns>
+            </TableView>
+            <TableView fx:id="appointmentByContactTable" layoutX="321.0" layoutY="77.0" prefHeight="200.0" prefWidth="596.0">
+              <columns>
+                <TableColumn fx:id="abcAppointmentIDColumn" prefWidth="101.0" text="Appointment ID" />
+                <TableColumn fx:id="abcTitleColumn" prefWidth="61.0" text="Title" />
+                  <TableColumn fx:id="abcTypeColumn" prefWidth="63.0" text="Type" />
+                  <TableColumn fx:id="abcDescriptionColumn" prefWidth="75.0" text="Description" />
+                  <TableColumn fx:id="abcStartColumn" prefWidth="108.0" text="Start" />
+                  <TableColumn fx:id="abcEndColumn" prefWidth="108.0" text="End" />
+                  <TableColumn fx:id="abcCustomerColumn" prefWidth="79.0" text="Customer ID" />
+              </columns>
+            </TableView>
+            <Button layoutX="438.0" layoutY="553.0" mnemonicParsing="false" onMouseClicked="#close" text="Close" />
+            <Label layoutX="19.0" layoutY="52.0" text="Appointments by Type and Month">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="contactComboBox" layoutX="321.0" layoutY="48.0" onAction="#contactSelection" prefWidth="150.0" promptText="Select a Contact" />
+            <Label layoutX="483.0" layoutY="52.0" text="Appointments By Contact (Ordered by Start Date)">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <TableView fx:id="customerTable" layoutY="344.0" prefHeight="200.0" prefWidth="674.0">
+              <columns>
+                <TableColumn fx:id="customerAppointmentIDColumn" prefWidth="100.0" text="Appointment ID" />
+                <TableColumn fx:id="customerTitleColumn" prefWidth="50.0" text="Title" />
+                  <TableColumn fx:id="customerTypeColumn" prefWidth="47.0" text="Type" />
+                  <TableColumn fx:id="customerDescriptionColumn" prefWidth="81.0" text="Description" />
+                  <TableColumn fx:id="customerStartColumn" prefWidth="113.0" text="Start" />
+                  <TableColumn fx:id="customerEndColumn" prefWidth="121.0" text="End" />
+                  <TableColumn fx:id="customerContactIDColumn" prefWidth="83.0" text="Contact ID" />
+                  <TableColumn fx:id="customerUserIDColumn" prefWidth="75.0" text="User ID" />
+              </columns>
+            </TableView>
+            <Label layoutX="225.0" layoutY="319.0" text="Appointments By Customer">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="customerComboBox" layoutY="315.0" onAction="#customerSelection" prefWidth="150.0" promptText="Select A Customer" />
          </children>
       </Pane>
    </children>

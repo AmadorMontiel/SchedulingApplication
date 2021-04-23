@@ -47,6 +47,10 @@ public class Appointment {
      */
     private int contactID;
 
+    private String month;
+
+    private int count;
+
     /**
      * The contructor for the appointment class.
      * @param appointmentID the appointment ID.
@@ -78,6 +82,33 @@ public class Appointment {
     public Appointment(int appointmentID, LocalDateTime start, int userID){
         this.appointmentID = appointmentID;
         this.start = start;
+        this.userID = userID;
+    }
+
+    public Appointment(String month, String type, int count) {
+        this.month = month;
+        this.type = type;
+        this.count = count;
+    }
+
+    public Appointment(int appointmentID, String title, String type, String descripton, LocalDateTime start, LocalDateTime end, int customer_id) {
+        this.appointmentID = appointmentID;
+        this.title = title;
+        this.type = type;
+        this.description = descripton;
+        this.start = start;
+        this.end = end;
+        this.customerID = customer_id;
+    }
+
+    public Appointment(int appointmentID, String title, String type, String descripton, LocalDateTime start, LocalDateTime end, int contactID, int userID) {
+        this.appointmentID = appointmentID;
+        this.title = title;
+        this.type = type;
+        this.description = descripton;
+        this.start = start;
+        this.end = end;
+        this.contactID = contactID;
         this.userID = userID;
     }
 
@@ -239,6 +270,22 @@ public class Appointment {
      */
     public void setContactID(int contactID) {
         this.contactID = contactID;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override

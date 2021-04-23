@@ -51,7 +51,7 @@ public class AddAppointmentController {
         contactComboBox.setItems(ContactDaoImpl.getAllContacts());
         customerComboBox.setItems(CustomerDaoImpl.getAllCustomers());
         userComboBox.setItems(UserDaoImpl.getAllUsers());
-        appointmentIDTextField.setText(String.valueOf(AppointmentDaoImpl.currentAppointmentID));
+        appointmentIDTextField.setText("Auto-Generated");
 
         while (startTime.isBefore(endTime.plusSeconds(1))) {
             startTimeComboBox.getItems().add(startTime);
@@ -111,7 +111,7 @@ public class AddAppointmentController {
 
         if ((estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) && estStartDate.isEqual(estEndDate)) {
             System.out.println("The Time works");
-            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId(), Integer.parseInt(appointmentIDTextField.getText())))
+            if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
             {
                 System.out.println("There is an overlapping appointment.");
                 return false;

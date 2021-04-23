@@ -5,9 +5,7 @@ import DataModel.FirstLevelDivision;
 import Implementations.CountryDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Implementations.FirstLevelDivisionDaoImpl;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -32,8 +30,7 @@ public class AddCustomerController {
 
     public void initialize() {
         countryComboBox.setItems(countryObservableList);
-        customerIDTextField.setText(String.valueOf(CustomerDaoImpl.currentCustomerID));
-
+        customerIDTextField.setText("Auto-Generated");
     }
 
     public void countrySelection() {

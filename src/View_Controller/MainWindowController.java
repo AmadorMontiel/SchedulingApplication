@@ -196,7 +196,7 @@ public class MainWindowController {
 
     public void receiveUser(User userLoggedIn) {
         loggedInUser = userLoggedIn;
-        associatedAppointmentsWithUser = AppointmentDaoImpl.getAppointmentsAssociatedWithUser(loggedInUser.getUserID());
+        associatedAppointmentsWithUser = AppointmentDaoImpl.getAppointmentsByUser(loggedInUser.getUserID());
         for (Appointment appointment : associatedAppointmentsWithUser) {
             if(AppointmentDaoImpl.isAppointmentWithin15Minutes(appointment.getAppointmentID())) {
                 appointmentAlert.setTitle("Alert");
@@ -204,6 +204,7 @@ public class MainWindowController {
                 appointmentAlert.setContentText("Appointment ID: " + appointment.getAppointmentID()
                         + " Date/Time: " + TimeConversion.localTimeConversion(appointment.getStart()));
                 appointmentAlert.show();
+                break;
             } else {
                 appointmentAlert.setTitle("Alert");
                 appointmentAlert.setHeaderText("No Upcoming Appointments");

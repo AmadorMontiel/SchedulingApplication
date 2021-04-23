@@ -15,16 +15,11 @@ import java.sql.SQLException;
 public class ContactDaoImpl {
 
     /**
-     * The List of Contacts from the DB
-     */
-    private static ObservableList<Contact> contacts;
-
-    /**
      * Returns the list of Contacts
      * @return the list of Contacts
      */
     public static ObservableList<Contact> getAllContacts() {
-        contacts = FXCollections.observableArrayList();
+        ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT * from contacts";
@@ -42,6 +37,7 @@ public class ContactDaoImpl {
         }
         return contacts;
     }
+
     public static Contact getContactByID(int contactID) {
         Contact contact = null;
 

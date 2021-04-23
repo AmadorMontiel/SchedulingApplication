@@ -36,9 +36,10 @@ public class ViewAppointmentsController  {
     public RadioButton viewAll;
 
 
-    ObservableList<Appointment> appointmentsList;
+    private ObservableList<Appointment> appointmentsList;
 
     public void initialize() {
+
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -52,23 +53,21 @@ public class ViewAppointmentsController  {
         appointmentsList = AppointmentDaoImpl.getAllAppointments();
         allAppointments();
 
-
-
     }
 
     public void appointmentsByWeek() {
+        appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByWeek());
 
     }
 
     public void appointmentsByMonth() {
-
+        appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByMonth());
     }
 
     public void allAppointments() {
         appointmentsTable.setItems(appointmentsList);
 
     }
-
 
     /**
      * Closes the add appointment screen and takes the use back to the main screen.

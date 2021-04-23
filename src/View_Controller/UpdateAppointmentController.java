@@ -91,8 +91,8 @@ public class UpdateAppointmentController {
         typeTextField.setText(selectedAppointment.getType());
         startDatePicker.setValue(selectedAppointment.getStart().toLocalDate());
         endDatePicker.setValue(selectedAppointment.getEnd().toLocalDate());
-        startTimeComboBox.setValue(TimeConversion.localTimeConversion(selectedAppointment.getStart()).toLocalTime());
-        endTimeComboBox.setValue(TimeConversion.localTimeConversion(selectedAppointment.getEnd()).toLocalTime());
+        startTimeComboBox.setValue(selectedAppointment.getStart().toLocalTime());
+        endTimeComboBox.setValue(selectedAppointment.getEnd().toLocalTime());
 
         getComboBoxItems(selectedAppointment);
         contactComboBox.setValue(contact);
@@ -103,7 +103,7 @@ public class UpdateAppointmentController {
     }
 
     /**
-     * HAS A LAMBDA EXPRESSION
+     * HAS A LAMBDA EXPRESSION, implifies code, no method names, shorthand name of writing methods
      * @param event
      * @throws IOException
      */
@@ -163,8 +163,7 @@ public class UpdateAppointmentController {
         LocalTime estEnding = ESTEndTime.toLocalTime();
         LocalDate estEndDate = ESTEndTime.toLocalDate();
 
-        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && estStartDate.isEqual(estEndDate)) {
-            System.out.println("The Time works");
+        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && (estStartDate.isEqual(estEndDate) || (estStartDate.isBefore(estEndDate)))) {
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId(), Integer.parseInt(appointmentIDTextField.getText())))
             {
                 errorAlert.setTitle("Error");
@@ -179,7 +178,7 @@ public class UpdateAppointmentController {
             }
         } else {
             errorAlert.setTitle("Error");
-            errorAlert.setHeaderText("Invalid Input");
+            errorAlert.setHeaderText("Invalid Time");
             errorAlert.setContentText("Time falls outside of business hours.");
             errorAlert.show();
             return false;

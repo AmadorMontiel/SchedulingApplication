@@ -1,35 +1,23 @@
 package Implementations;
 
-import DataModel.Appointment;
 import DataModel.Customer;
 import Utility.DBConnection;
-import com.mysql.cj.protocol.Resultset;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.*;
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 /**
  * DAO implementation of the Customer Class
  */
 public class CustomerDaoImpl {
 
-    /**
-     * List of customers stored as an observable list
-     */
-    private static ObservableList<Customer> customers;
-    public static int currentCustomerID;
 
     /**
      * Returns the list of customers from the database.
      * @return the list of customers
      */
     public static ObservableList<Customer> getAllCustomers() {
-        customers = FXCollections.observableArrayList();
-        currentCustomerID = 1;
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
         try {
             String sql = "SELECT * from customers";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
@@ -45,7 +33,6 @@ public class CustomerDaoImpl {
                 Customer c = new Customer(customerID,customerName, address, postalCode, phoneNumber,
                         divisionID);
                 customers.add(c);
-                currentCustomerID++;
             }
             rs.close();
             ps.close();
@@ -67,22 +54,18 @@ public class CustomerDaoImpl {
     public static void addCustomer(String name, String address, String postalCode,
                             String phoneNumber, int divisionID) {
 
-        String sql = "INSERT INTO customers VALUES(?, ?, ?, ?, ?" +
-                ", ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, DivisionID)" +
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, currentCustomerID);
-            ps.setString(2, name);
-            ps.setString(3, address);
-            ps.setString(4, postalCode);
-            ps.setString(5, phoneNumber);
-            ps.setObject(6, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
-            ps.setString(7, "User");
-            ps.setObject(8, Timestamp.valueOf(LocalDateTime.now(Clock.systemUTC())));
-            ps.setString(9, "User");
-            ps.setInt(10, divisionID);
+            ps.setString(1, name);
+            ps.setString(2, address);
+            ps.setString(3, postalCode);
+            ps.setString(4, phoneNumber);
+            ps.setString(5, "User");
+            ps.setString(6, "User");
+            ps.setInt(7, divisionID);
             ps.executeUpdate();
-            currentCustomerID++;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -116,6 +99,7 @@ public class CustomerDaoImpl {
             throwables.printStackTrace();
         }
     }
+
     public static Customer getCustomerByID(int customerID) {
         Customer customer = null;
 
@@ -127,7 +111,7 @@ public class CustomerDaoImpl {
             while(rs.next()) {
                 int id = rs.getInt("Customer_ID");
                 String name = rs.getString("Customer_Name");
-                customer = new Customer(id, name,null,null,null,-1);
+                customer = new Customer(id, name);
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
