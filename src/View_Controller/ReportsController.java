@@ -6,6 +6,7 @@ import DataModel.Customer;
 import Implementations.AppointmentDaoImpl;
 import Implementations.ContactDaoImpl;
 import Implementations.CustomerDaoImpl;
+import Interfaces.LambdaReportDisplay;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -51,15 +52,23 @@ public class ReportsController {
 
     public ComboBox<Contact> contactComboBox;
     public ComboBox<Customer> customerComboBox;
+    private ObservableList<Appointment> appointmentByMonthList;
 
 
-
+    /**
+     * Contains the second Lambda Expression
+     */
     public void initialize() {
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         monthColumn.setCellValueFactory(new PropertyValueFactory<>("month"));
-        ObservableList<Appointment> appointmentObservableList = AppointmentDaoImpl.getAppointmentsByTypeAndMonth();
-        appointmentByMonthAndTypeTable.setItems(appointmentObservableList);
+
+        LambdaReportDisplay lrd = (ObservableList<Appointment> appointments) -> {
+            appointments = AppointmentDaoImpl.getAppointmentsByTypeAndMonth();
+            return appointments;
+        };
+
+        appointmentByMonthAndTypeTable.setItems(lrd.observableListAssignment(appointmentByMonthList));
 
         abcAppointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         abcTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -84,9 +93,7 @@ public class ReportsController {
     }
 
     public void contactSelection() {
-
         appointmentByContactTable.setItems(AppointmentDaoImpl.getAppointmentsByContact(contactComboBox.getSelectionModel().getSelectedItem().getContactID()));
-
     }
 
     public void customerSelection() {
