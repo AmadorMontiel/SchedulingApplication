@@ -14,10 +14,14 @@ public class Contact {
      */
     private String name;
 
+    /**
+     * Constructor for contacts.
+     * @param contactID The ID of the contact.
+     * @param name The name of the contact.
+     */
     public Contact(int contactID, String name){
         this.contactID = contactID;
         this.name = name;
-
     }
 
     /**
@@ -52,6 +56,10 @@ public class Contact {
         this.name = name;
     }
 
+    /**
+     * Overridden toString method for display purposes.
+     * @return The ID and Name.
+     */
     @Override
     public String toString() {
         return "ID: " + contactID + " Name: " + name;

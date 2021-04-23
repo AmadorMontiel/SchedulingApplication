@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 /**
  * The login controller handles the actions taken on the login screen.
- * This includes sign in verification, error checking, sign on logging,
+ * This includes sign in verification, error checking, sign on logging, and translation as needed.
  */
 public class LoginController {
 
@@ -106,7 +106,7 @@ public class LoginController {
 
     /**
      * Passes the username and password information provided to the UserDAO to check to see if the information is valid.
-     * If the inforamtion is valid, logs into the applicaiton and loads the main screen.
+     * If the inforamtion is valid, logs into the application and loads the main screen.
      * If the information is invalid, shows an error message.
      * @param event Clicking "Login" triggers the action.
      */
@@ -184,6 +184,11 @@ public class LoginController {
 
     }
 
+    /**
+     * Helper method for sending information from login screen to mainwindow.
+     * @return returns the loader to be used for the next screen
+     * @throws IOException Exception thrown when dealing with FXMLLoader
+     */
     private FXMLLoader getFxmlLoader() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("mainwindow.fxml"));

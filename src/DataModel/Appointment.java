@@ -46,13 +46,17 @@ public class Appointment {
      * The contact ID of the contact associated with the appointment.
      */
     private int contactID;
-
+    /**
+     *  The month of the appointment.
+     */
     private String month;
-
+    /**
+     * The count of appointments.
+     */
     private int count;
 
     /**
-     * The contructor for the appointment class.
+     * The main contructor for the appointment class.
      * @param appointmentID the appointment ID.
      * @param title the appointment title.
      * @param description the appointment description.
@@ -79,18 +83,40 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+    /**
+     * Additional constructor used in getAppointsByUser method.
+     * @param appointmentID The appointmentID of the appointment.
+     * @param start Start date and time of the appointment.
+     * @param userID Associated userID of the appointment
+     */
     public Appointment(int appointmentID, LocalDateTime start, int userID){
         this.appointmentID = appointmentID;
         this.start = start;
         this.userID = userID;
     }
 
+    /**
+     * Additional constructor used in getAppointmentsByTypeAndMonth method.
+     * @param month The month of the appointment.
+     * @param type The type of appointment.
+     * @param count The count of the appointments.
+     */
     public Appointment(String month, String type, int count) {
         this.month = month;
         this.type = type;
         this.count = count;
     }
 
+    /**
+     * Additional constructor used in the getAppointmentsByContact method.
+     * @param appointmentID The AppointmentID of the appointment.
+     * @param title The Title of the appointment.
+     * @param type The type of appointment.
+     * @param descripton The description of the appointment.
+     * @param start The start date/time of the appointment.
+     * @param end The end date/time of the appointment.
+     * @param customer_id The customerID associated with the appointment
+     */
     public Appointment(int appointmentID, String title, String type, String descripton, LocalDateTime start, LocalDateTime end, int customer_id) {
         this.appointmentID = appointmentID;
         this.title = title;
@@ -101,6 +127,17 @@ public class Appointment {
         this.customerID = customer_id;
     }
 
+    /**
+     * Additional constructor used in the getAppointmentsByCustomer method.
+     * @param appointmentID The appointmentID of the appointment.
+     * @param title The title of the appointment.
+     * @param type The type of the appointment.
+     * @param descripton The description of the appointment.
+     * @param start The start date/time of the appointment.
+     * @param end The end date/time of the appointment.
+     * @param contactID The associated contactID.
+     * @param userID The associated userID.
+     */
     public Appointment(int appointmentID, String title, String type, String descripton, LocalDateTime start, LocalDateTime end, int contactID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
@@ -272,22 +309,42 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+    /**
+     * Gets the month of the appointment.
+     * @return the month of the appointment.
+     */
     public String getMonth() {
         return month;
     }
 
+    /**
+     * Sets the month of the appointment.
+     * @param month the month to set.
+     */
     public void setMonth(String month) {
         this.month = month;
     }
 
+    /**
+     * Gets the count of appointments.
+     * @return the count of appointments.
+     */
     public int getCount() {
         return count;
     }
 
+    /**
+     * Sets the count of the appointments.
+     * @param count the count to set.
+     */
     public void setCount(int count) {
         this.count = count;
     }
 
+    /**
+     * Overridden toString method for display purposes.
+     * @return The ID and Type of the appointment.
+     */
     @Override
     public String toString() {
         return "ID: " + appointmentID + " Type: " + type;
