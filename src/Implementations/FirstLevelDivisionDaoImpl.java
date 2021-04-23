@@ -1,6 +1,5 @@
 package Implementations;
 
-import DataModel.Country;
 import DataModel.FirstLevelDivision;
 import Utility.DBConnection;
 import javafx.collections.FXCollections;
@@ -10,25 +9,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The DAO implementation of the FirstLevelDivision Class
+ */
 public class FirstLevelDivisionDaoImpl {
 
-    private static ObservableList<FirstLevelDivision> firstLevelDivisions;
-
+    /**
+     * Gets a list of first level divisions based on a Country ID.
+     * @param countryID Country ID used to determine the first level divisions.
+     * @return An observable list of first level divisions.
+     */
     public static ObservableList<FirstLevelDivision> getFirstLevelDivisions(int countryID) {
-        firstLevelDivisions = FXCollections.observableArrayList();
+        ObservableList<FirstLevelDivision> firstLevelDivisions = FXCollections.observableArrayList();
         try {
-            //The SQL statement you want to run in the DB
             String sql = "SELECT * FROM first_level_divisions";
-            //Creates a prepared statement by first getting the connection, and calling
-            //the prepareStatement method on the connection using the SQL command from above
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
-            //Once the rows have been retrieved, sets the result of the query
-            //equal to the result set
             ResultSet rs = ps.executeQuery();
-
-            //This while loop loops through the result set getting the ID of the country and
-            //the name of the country, creating a new Country from that data, and then
-            //adds the new Country to the list for display
 
             while(rs.next()) {
                 if(rs.getInt("COUNTRY_ID") == countryID) {
@@ -41,10 +37,14 @@ public class FirstLevelDivisionDaoImpl {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         return firstLevelDivisions;
     }
 
+    /**
+     * Gets a specific first level division based on the ID.
+     * @param divisionID The ID of the division.
+     * @return The division related to the ID.
+     */
     public static FirstLevelDivision getDivisionByID(int divisionID) {
         FirstLevelDivision fld = null;
         try {

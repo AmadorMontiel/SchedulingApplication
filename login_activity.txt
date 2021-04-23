@@ -1,2 +1,0 @@
-Login Attempt #1 - User: moose - Occured at: Thu, 25 Mar 2021 20:50:24 GMT - Unsuccessful.
-Login Attempt #2 - User: test - Occured at: Thu, 25 Mar 2021 20:50:29 GMT - Successful.

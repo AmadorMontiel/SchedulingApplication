@@ -71,6 +71,15 @@ public class CustomerDaoImpl {
         }
     }
 
+    /**
+     * Updates a Customer that already exists within the Database.
+     * @param ID The ID of the Customer.
+     * @param name The name of the Customer.
+     * @param address The address of the Customer.
+     * @param postalCode The postal code of the Customer.
+     * @param phoneNumber The phone number of the Customer.
+     * @param divisionID The divison ID of the customer.
+     */
     public static void modifyCustomer(int ID, String name, String address, String postalCode,
                                       String phoneNumber, int divisionID) {
         String sql = "UPDATE customers set Customer_Name = ?, Address = ?, Postal_Code = ?" +
@@ -90,6 +99,10 @@ public class CustomerDaoImpl {
         }
     }
 
+    /**
+     * Deletes a customer from the database based on the Customer ID.
+     * @param customerID The ID of the customer to be deleted.
+     */
     public static void deleteCustomer(int customerID) {
         try {
             String sql = "DELETE FROM customers WHERE Customer_ID = " + customerID;
@@ -100,6 +113,11 @@ public class CustomerDaoImpl {
         }
     }
 
+    /**
+     * Gets a Customer based on its ID.
+     * @param customerID The ID of the Customer.
+     * @return The Customer based on the ID.
+     */
     public static Customer getCustomerByID(int customerID) {
         Customer customer = null;
 

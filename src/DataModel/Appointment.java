@@ -35,9 +35,13 @@ public class Appointment {
      */
     private LocalDateTime end;
     /**
-     * The customer ID of the customer in the apppointment.
+     * The customer ID of the customer in the appointment.
      */
     private int customerID;
+    /**
+     * The
+     */
+    private String customerName;
     /**
      * The user ID of the user creating the apppointment.
      */
@@ -46,6 +50,7 @@ public class Appointment {
      * The contact ID of the contact associated with the appointment.
      */
     private int contactID;
+    private String contactName;
     /**
      *  The month of the appointment.
      */
@@ -147,6 +152,32 @@ public class Appointment {
         this.end = end;
         this.contactID = contactID;
         this.userID = userID;
+    }
+
+    /**
+     * Additional Constuctor used in the getAppointments, getAppointmentByWeek, and getAppointmentByMonth methods;
+     * @param appointmentID The appointmentID of the appointment.
+     * @param title The title of the appointment.
+     * @param description The description of the appointment.
+     * @param location The location of the appointment.
+     * @param type The type of the appointment.
+     * @param start The start date/time of the appointment.
+     * @param end The end date/time of the appointment.
+     * @param customerName The associated customerName of the appointment.
+     * @param userID The associated UserID of the appointment.
+     * @param contactName The associated contactName of the appointment.
+     */
+    public Appointment(int appointmentID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, String customerName, int userID, String contactName) {
+        this.appointmentID = appointmentID;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.customerName = customerName;
+        this.userID = userID;
+        this.contactName = contactName;
     }
 
     /**
@@ -339,6 +370,38 @@ public class Appointment {
      */
     public void setCount(int count) {
         this.count = count;
+    }
+
+    /**
+     * Gets the associated customerName.
+     * @return the customerName.
+     */
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    /**
+     * Sets the customerName.
+     * @param customerName The customerName to set.
+     */
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    /**
+     * Gets the associated contactName.
+     * @return The contactName.
+     */
+    public String getContactName() {
+        return contactName;
+    }
+
+    /**
+     * Sets the contactName.
+     * @param contactName The contactName to be set.
+     */
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
     }
 
     /**

@@ -81,6 +81,10 @@ public class FirstLevelDivision {
         this.countryID = countryID;
     }
 
+    /**
+     * Overridden toString method for display purposes.
+     * @return The division name.
+     */
     @Override
     public String toString(){
         return division;

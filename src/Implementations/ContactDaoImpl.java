@@ -15,8 +15,8 @@ import java.sql.SQLException;
 public class ContactDaoImpl {
 
     /**
-     * Returns the list of Contacts
-     * @return the list of Contacts
+     * Gets a list of all Contacts within the database.
+     * @return An observable list of all contacts.
      */
     public static ObservableList<Contact> getAllContacts() {
         ObservableList<Contact> contacts = FXCollections.observableArrayList();
@@ -38,6 +38,11 @@ public class ContactDaoImpl {
         return contacts;
     }
 
+    /**
+     * Gets a Contact based on its ID
+     * @param contactID The ID of the Contact.
+     * @return The Contact with the ID.
+     */
     public static Contact getContactByID(int contactID) {
         Contact contact = null;
 

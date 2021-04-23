@@ -9,9 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * DAO implementation of the User Class.
+ */
 public class UserDaoImpl {
-
-    private static ObservableList<User> users;
 
     /**
      * Method that checks if the user logging into the application is a valid user with a valid password.
@@ -40,8 +41,12 @@ public class UserDaoImpl {
         return false;
     }
 
+    /**
+     * Gets a list of all Users in the database.
+     * @return An observable list of all users.
+     */
     public static ObservableList<User> getAllUsers() {
-        users = FXCollections.observableArrayList();
+        ObservableList<User> users = FXCollections.observableArrayList();
 
         try {
             String sql = "SELECT * from users";
@@ -64,6 +69,11 @@ public class UserDaoImpl {
         return users;
     }
 
+    /**
+     * Gets a User by their ID.
+     * @param userID The ID of the User
+     * @return The User based on the ID.
+     */
     public static User getUserByID(int userID) {
         User user = null;
 
@@ -83,11 +93,16 @@ public class UserDaoImpl {
         return user;
     }
 
+    /**
+     * Gets a User by their username.
+     * @param username The username of the User.
+     * @return The User based on the username.
+     */
     public static User getUserByName(String username) {
         User user = null;
 
         try {
-            String sql = "SELECT * FROM users WHERE User_Name = \"test\"";
+            String sql = "SELECT * FROM users WHERE User_Name = " + "\""+ username + "\"";
             PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 

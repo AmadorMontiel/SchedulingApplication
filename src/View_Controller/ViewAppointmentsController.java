@@ -44,19 +44,20 @@ public class ViewAppointmentsController  {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
-        contactColumn.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        contactColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>( "type"));
         startDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
         endDateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
-        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
-        appointmentsList = AppointmentDaoImpl.getAllAppointments();
+        appointmentsList = AppointmentDaoImpl.getAllAppointmentsWithNames();
         allAppointments();
 
     }
 
     public void appointmentsByWeek() {
         appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByWeek());
+
 
     }
 

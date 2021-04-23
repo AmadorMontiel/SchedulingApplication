@@ -80,6 +80,10 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * Overridden toString method for display purposes.
+     * @return The ID and name of the user.
+     */
     @Override
     public String toString() {
         return "ID: " + userID + " Name: " + name;
