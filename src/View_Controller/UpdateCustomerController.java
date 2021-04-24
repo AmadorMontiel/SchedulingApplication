@@ -43,12 +43,15 @@ public class UpdateCustomerController {
     public TableColumn<Customer, String> customerPhoneNumberColumn;
     public TableColumn<Customer, String> customerFLDColumn;
 
-    private ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
-    private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
+    private final ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
+    private final ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
     private FirstLevelDivision fld;
     private Country country;
 
-
+    /**
+     * Sets up the Customer table columns. Also fills the table with the Customer data.
+     * Sets the values for the Country combo box.
+     */
     public void initialize() {
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -61,11 +64,19 @@ public class UpdateCustomerController {
         countryComboBox.setItems(countryObservableList);
     }
 
+    /**
+     * Method that sets the first level division based on the Country that has been selected.
+     */
     public void countrySelection() {
         firstLevelDivisionComboBox.setValue(null);
         firstLevelDivisionComboBox.setItems(FirstLevelDivisionDaoImpl.getFirstLevelDivisions(countryComboBox.getSelectionModel().getSelectedItem().getCountryID()));
     }
 
+    /**
+     * Method that receives the Customer that was selected on the main screen.
+     * This Customer's information is then used to fill in the forms on the screen.
+     * @param selectedCustomer The customer being updated.
+     */
     public void receiveCustomer(Customer selectedCustomer) {
 
         customerIDTextField.setText(String.valueOf(selectedCustomer.getId()));
@@ -80,6 +91,11 @@ public class UpdateCustomerController {
 
     }
 
+    /**
+     * Saves the modified customer.
+     * @param event Clicking the "Save" button.
+     * @throws IOException IOException thrown by the close method.
+     */
     public void saveModifiedCustomer(MouseEvent event) throws IOException {
         CustomerDaoImpl.modifyCustomer(Integer.parseInt(customerIDTextField.getText()),
                 nameTextField.getText(),
@@ -90,11 +106,15 @@ public class UpdateCustomerController {
         close(event);
     }
 
+    /**
+     * Gets the first level division and country data from the selected customer
+     * and sets to temporary variables to be used in the receiveCustomer method.
+     * @param selectedCustomer The Customer being modified.
+     */
     private void getFLDandCountry(Customer selectedCustomer) {
         fld = FirstLevelDivisionDaoImpl.getDivisionByID(selectedCustomer.getDivisionID());
         country = CountryDaoImpl.getCountryByID(fld.getCountryID());
     }
-
 
     /**
      * Closes the add appointment screen and takes the use back to the main screen.

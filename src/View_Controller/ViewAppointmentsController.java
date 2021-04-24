@@ -4,7 +4,6 @@ import DataModel.Appointment;
 import Implementations.AppointmentDaoImpl;
 
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,6 +18,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * Controller for the View Appointments screen.
+ */
 public class ViewAppointmentsController  {
 
     public TableView<Appointment> appointmentsTable;
@@ -35,9 +37,12 @@ public class ViewAppointmentsController  {
     public RadioButton byWeek;
     public RadioButton viewAll;
 
-
     private ObservableList<Appointment> appointmentsList;
 
+    /**
+     * Sets up the columns for the appointment table.
+     * Sets the table to show all current appointments.
+     */
     public void initialize() {
 
         appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
@@ -52,22 +57,27 @@ public class ViewAppointmentsController  {
 
         appointmentsList = AppointmentDaoImpl.getAllAppointmentsWithNames();
         allAppointments();
-
     }
 
+    /**
+     * Changes the table to show the appointments that occur over the next week.
+     */
     public void appointmentsByWeek() {
         appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByWeek());
-
-
     }
 
+    /**
+     * CHanges the table to show the appointments that occur over the next month.
+     */
     public void appointmentsByMonth() {
         appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByMonth());
     }
 
+    /**
+     * Sets the table to show all current appointments.
+     */
     public void allAppointments() {
         appointmentsTable.setItems(appointmentsList);
-
     }
 
     /**

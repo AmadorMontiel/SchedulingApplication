@@ -71,6 +71,7 @@ public class UpdateAppointmentController {
         startTimeComboBox.getItems().add(LocalTime.of(23,45));
         endTimeComboBox.getItems().add(LocalTime.of(23,45));
     }
+
     /**
      * Closes the add appointment screen and takes the use back to the main screen.
      * @param event Clicking the "Save" or "cancel" button

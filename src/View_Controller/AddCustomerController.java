@@ -30,7 +30,7 @@ public class AddCustomerController {
     public TextField addressTextField;
     public TextField postalCodeTextField;
     public TextField phoneNumberTextField;
-    ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
+    private final ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
     private final Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
     /**
