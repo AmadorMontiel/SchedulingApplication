@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +20,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The controller for the main window screen.
+ */
 public class MainWindowController {
 
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -34,25 +36,27 @@ public class MainWindowController {
     public ComboBox<Appointment> appointmentsComboBox;
     public ComboBox<Customer> customersComboBox;
     public Stage stage;
-    public Button exitButton;
 
+    /**
+     * Sets the values for the Customer and Appointment combo boxes.
+     */
     public void initialize() {
-
         customersComboBox.setItems(CustomerDaoImpl.getAllCustomers());
         appointmentsComboBox.setItems(AppointmentDaoImpl.getAllAppointments());
-
-        //Added lambda function to close that application on clicking Exit button
-        exitButton.setOnAction(event -> Platform.exit());
     }
 
     /**
      * Closes the application
      */
-    /*
     public void exitProgram() {
         Platform.exit();
     }
-*/
+
+    /**
+     * Helper method to load new scenes.
+     * @param event Clicking the appropriate button to load a new scene.
+     * @param s The string that captures the fxml file to be loaded.
+     */
     private void sceneLoader(MouseEvent event, String s) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(s));
@@ -69,6 +73,12 @@ public class MainWindowController {
         stage.show();
     }
 
+    /**
+     * Helper method for getting the FXMLLoader.
+     * @param s The String representing the FXML file.
+     * @return Returns the loader.
+     * @throws IOException Throws IOException on .load
+     */
     private FXMLLoader getFxmlLoader(String s) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(s));
@@ -76,6 +86,12 @@ public class MainWindowController {
         return loader;
     }
 
+    /**
+     * Used by the update customer and update appointment methods.
+     * Used because of the need to send inforomation to those screens.
+     * @param event Clicking the appropriate button for the scene
+     * @param loader Loader of the scene needed to load.
+     */
     private void loadNewScene(MouseEvent event, FXMLLoader loader) {
         Node node = (Node) event.getSource();
         stage = (Stage) node.getScene().getWindow();
@@ -84,10 +100,21 @@ public class MainWindowController {
         stage.show();
     }
 
+    /**
+     * Opens the add customer screen.
+     * @param event Clicking the "Add" button under customers.
+     */
     public void addCustomerClicked(MouseEvent event) {
         sceneLoader(event, "addcustomer.fxml");
     }
 
+    /**
+     * Opens the update customer screen. Also sends the customer information that
+     * is selected to the update customer screen.
+     * Shows an error if button is clicked and no customer has been selected.
+     * @param event Clicking "Update" under customers.
+     * @throws IOException IOException thrown by loadNewScene method.
+     */
     public void updateCustomerClicked(MouseEvent event) throws IOException {
         FXMLLoader loader = getFxmlLoader("updatecustomer.fxml");
 
@@ -103,6 +130,13 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Deletes the selected customer. Prior is deletion, checks to see if there are any
+     * associated appointments with that customer. If an associated appointment exists,
+     * shows an error saying the appointment must be deleted first.
+     * Also confirms with the user that they want the customer deleted.
+     * Will also show an error if button is clicked and no customer has been selected.
+     */
     public void deleteCustomerClicked() {
         if (customersComboBox.getSelectionModel().getSelectedItem() != null) {
             if(AppointmentDaoImpl.getAssociatedAppointments(customersComboBox.getSelectionModel().getSelectedItem().getId()) == 0) {
@@ -139,10 +173,21 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Opens the add appointment screen.
+     * @param event Clicking "add" under appointments.
+     */
     public void addAppointmentClicked(MouseEvent event) {
         sceneLoader(event, "addappointment.fxml");
     }
 
+    /**
+     * Opens the update appointment screen. Also send the appointment information
+     * that is selected to the update appointment screen.
+     * Shows an error if the button is clicked and no appointment has been selected.
+     * @param event Clicking "Update" under appointments.
+     * @throws IOException IOException thrown by loadNewScene method.
+     */
     public void updateAppointmentClicked(MouseEvent event) throws IOException {
         FXMLLoader loader = getFxmlLoader("updateappointment.fxml");
 
@@ -154,10 +199,16 @@ public class MainWindowController {
             errorAlert.setTitle("Error");
             errorAlert.setHeaderText("No Appointment Selected");
             errorAlert.setContentText("Please select an appointment to update.");
+            errorAlert.show();
         }
     }
 
-    public void deleteAppointmentClicked(MouseEvent event) {
+    /**
+     * Deletes the selected appointment. Prior to deletion, confirms with the user
+     * they want to delete the appointment.
+     * Shows an error if the button is clicked and no appointment has been selected.
+     */
+    public void deleteAppointmentClicked() {
         if(appointmentsComboBox.getSelectionModel().getSelectedItem() != null) {
             deletionConfirmationAlert.setTitle("Confirmation");
             deletionConfirmationAlert.setHeaderText("Confirm Appointment Deletion");
@@ -186,14 +237,32 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Loads the view appointment screen.
+     * @param event Clicking the "View" button.
+     */
     public void viewAppointmentsClicked(MouseEvent event) {
         sceneLoader(event, "viewappointment.fxml");
     }
 
+    /**
+     * Loads the reports screen.
+     * @param event Clicking the "Reports" button.
+     */
     public void reportsClicked(MouseEvent event) {
         sceneLoader(event, "reports.fxml");
     }
 
+    /**
+     * Method that receieves the user information from the login screen.
+     * User info is then passed to the AppointmentDAO file to see if there
+     * is any appointments coming up in the next 15 minutes for the user.
+     * If an appointment is starting within the next 15 minutes, an alert shows
+     * as soon as the user logs in saying the ID and time of the appointment.
+     * If there is on appointment starting within 15 minutes of logging in, an alert
+     * shows indicating such.
+     * @param userLoggedIn User logged into the system.
+     */
     public void receiveUser(User userLoggedIn) {
         loggedInUser = userLoggedIn;
         associatedAppointmentsWithUser = AppointmentDaoImpl.getAppointmentsByUser(loggedInUser.getUserID());

@@ -22,6 +22,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.*;
 
+/**
+ * Controller for the Add Appointment screen.
+ */
 public class AddAppointmentController {
 
     public TextField appointmentIDTextField;
@@ -46,6 +49,10 @@ public class AddAppointmentController {
 
     public Alert errorAlert = new Alert(Alert.AlertType.ERROR);
 
+    /**
+     * Loads and displays the combo box info for Contacts, Customers, and Users.
+     * Also fills in values of the startTime and endTime combo boxes for selection.
+     */
     public void initialize() {
 
         contactComboBox.setItems(ContactDaoImpl.getAllContacts());
@@ -62,6 +69,13 @@ public class AddAppointmentController {
         endTimeComboBox.getItems().add(LocalTime.of(23,45));
     }
 
+    /**
+     * Attmepts to save a new appointment using the information entered/selected by the user.
+     * Checks to make sure that information has been entered for all fields and displays an error if not.
+     * Also calls isAllowableTime to check to make sure the date/time selected is valid.
+     * @param event Clicking the "save" button activates the method.
+     * @throws IOException Exception thrown by the close method.
+     */
     public void saveNewAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
             descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() ||
@@ -91,6 +105,15 @@ public class AddAppointmentController {
         }
     }
 
+    /**
+     * Checks to see if the appointment overlaps with any other appointments.
+     * Determines if the date/time entered of the new appointment is valid.
+     * This is done by converting the times to EST and comparing the times to the open
+     * and close times of the business.
+     * @param start The start date/time of the new appointment.
+     * @param end The end date/time of the new appointment.
+     * @return Returns true is the date/time is valid, otherwise, returns false.
+     */
     private boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
 
         LocalTime businessOpenTime = LocalTime.of(8,0);

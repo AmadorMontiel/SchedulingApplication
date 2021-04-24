@@ -25,63 +25,21 @@ import java.util.ResourceBundle;
  */
 public class LoginController {
 
-    /**
-     * The text field where the user enters their username.
-     */
+
     public TextField usernameTextField;
-    /**
-     * The text field where the user enters their password.
-     */
     public PasswordField passwordField;
-    /**
-     * Zone ID label that shows the user's current location.
-     */
     public Label zoneID;
-    /**
-     * Sign in label
-     */
     public Label signInLabel;
-    /**
-     * Button clicked to log into the program.
-     */
     public Button loginButton;
-    /**
-     * Button clicked to exit the program.
-     */
     public Button exitButton;
-    /**
-     * Username label.
-     */
     public Label usernameLabel;
-    /**
-     * Password label.
-     */
     public Label passwordLabel;
 
-    /**
-     * Alert that shows when an incorrect username and/or password is entered.
-     */
     private final Alert loginAlert = new Alert(Alert.AlertType.ERROR);
-    /**
-     * DateTimeFormatter that sets the format for the time printed in the logApplicationLogin method.
-     */
     private DateTimeFormatter dtf = DateTimeFormatter.RFC_1123_DATE_TIME;
-    /**
-     * ResourceBundle utilized in the translation method for translation to French.
-     */
     private ResourceBundle rb = ResourceBundle.getBundle("Utility/Nat", Locale.forLanguageTag("fr"));
-    /**
-     * FileWriter that creates the file in the root folder. Allows for data to be appended to the file.
-     * Used in the logApplicationLogin method.
-     */
     private FileWriter fw = new FileWriter("src/login_activity.txt",true);
-    /**
-     * PrintWriter that utilizes the FileWriter created above. Used in the logApplicationLogin method.
-     */
     private PrintWriter pw = new PrintWriter(fw);
-    /**
-     * Counts the number of login attempts made until success.
-     */
     int loginCount = 1;
 
     /**
@@ -92,8 +50,8 @@ public class LoginController {
     }
 
     /**
-     * Sets any initial information.
-     * Retrieves the zoneID from the user's computer and displays it.
+     * Checks the locale and translates if needed. Otherwise, just retrieves the
+     * zoneID from the user's computer and displays it.
      */
     public void initialize() {
 

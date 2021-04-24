@@ -21,6 +21,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller for the Update Customer Controller.
+ */
 public class UpdateCustomerController {
 
     public TextField customerIDTextField;
@@ -42,7 +45,6 @@ public class UpdateCustomerController {
 
     private ObservableList<Country> countryObservableList = CountryDaoImpl.getAllCountries();
     private ObservableList<Customer> customerObservableList = CustomerDaoImpl.getAllCustomers();
-    private Customer tempCustomer;
     private FirstLevelDivision fld;
     private Country country;
 
@@ -65,7 +67,6 @@ public class UpdateCustomerController {
     }
 
     public void receiveCustomer(Customer selectedCustomer) {
-        tempCustomer = selectedCustomer;
 
         customerIDTextField.setText(String.valueOf(selectedCustomer.getId()));
         nameTextField.setText(selectedCustomer.getName());

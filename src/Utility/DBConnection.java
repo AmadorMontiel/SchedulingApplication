@@ -41,9 +41,8 @@ public class DBConnection {
     /**
      * Starts the connection using the DBUrl, the username and the password.
      * Catches a SQLException and prints the stacktrace if triggered.
-     * @return the connection
      */
-    public static Connection startConnection() {
+    public static void startConnection() {
         try {
             conn = DriverManager.getConnection(dbURL,username,password);
             System.out.println("Connection Successful");
@@ -51,7 +50,6 @@ public class DBConnection {
         catch (SQLException e){
             e.printStackTrace();
         }
-        return conn;
     }
 
     /**

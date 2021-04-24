@@ -24,7 +24,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.*;
 
-
+/**
+ * Controller for the update appointment screen.
+ */
 public class UpdateAppointmentController {
     public TextField appointmentIDTextField;
     public TextField titleTextField;
@@ -52,6 +54,10 @@ public class UpdateAppointmentController {
     private Customer customer;
     private User user;
 
+    /**
+     * Loads and displays the combo box info for Contacts, Customers, and Users.
+     * Also fills in values of the startTime and endTime combo boxes for selection.
+     */
     public void initialize() {
         contactComboBox.setItems(ContactDaoImpl.getAllContacts());
         customerComboBox.setItems(CustomerDaoImpl.getAllCustomers());
@@ -82,6 +88,11 @@ public class UpdateAppointmentController {
         stage.show();
     }
 
+    /**
+     * Receives the appointment that was selected on the main screen and sets the form information
+     * based on the selected appointment.
+     * @param selectedAppointment The appointment selected on the main screen.
+     */
     public void receiveAppointment(Appointment selectedAppointment) {
 
         appointmentIDTextField.setText(String.valueOf((selectedAppointment.getAppointmentID())));
@@ -103,9 +114,13 @@ public class UpdateAppointmentController {
     }
 
     /**
-     * HAS A LAMBDA EXPRESSION, implifies code, no method names, shorthand name of writing methods
-     * @param event
-     * @throws IOException
+     * Attempts to save a new appointment using the information entered/selected by the user.
+     * Checks to make sure that information has been entered for all fields and displays an error if not.
+     * The error that is displayed utilizes a lambda expression.
+     * This lambda simplifies the code and reduces the amount of code needed if the alert needed to be used again.
+     * Calls isAllowableTime to make checks prior to saving the appointment.
+     * @param event Clicking the "Save" button.
+     * @throws IOException IOException thrown by close method.
      */
     public void saveUpdatedAppointment(MouseEvent event) throws IOException {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null || titleTextField.getText().isEmpty() ||
@@ -139,12 +154,25 @@ public class UpdateAppointmentController {
         }
     }
 
+    /**
+     * Uses the selected appointment from the main screen to extract the Contact, Customer and User info.
+     * @param selectedAppointment The appointment selected on the main screen.
+     */
     private void getComboBoxItems (Appointment selectedAppointment) {
         contact = ContactDaoImpl.getContactByID(selectedAppointment.getContactID());
         customer = CustomerDaoImpl.getCustomerByID(selectedAppointment.getCustomerID());
         user = UserDaoImpl.getUserByID(selectedAppointment.getUserID());
     }
 
+    /**
+     * Checks to see if the appointment overlaps with any other appointments.
+     * Determines if the date/time entered of the updated appointment is valid.
+     * This is done by converting the times to EST and comparing the times to the open
+     * and close times of the business.
+     * @param start The start date/time of the new appointment.
+     * @param end The end date/time of the new appointment.
+     * @return Returns true is the date/time is valid, otherwise, returns false.
+     */
     private boolean isAllowableTime(LocalDateTime start, LocalDateTime end) {
 
         LocalTime businessOpenTime = LocalTime.of(8,0);

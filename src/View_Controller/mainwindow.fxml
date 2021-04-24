@@ -39,6 +39,6 @@
          </children>
       </Pane>
       <Button layoutX="14.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#reportsClicked" text="Reports" />
-      <Button fx:id="exitButton" layoutX="712.0" layoutY="316.0" mnemonicParsing="false" text="Exit" />
+      <Button fx:id="exitButton" layoutX="712.0" layoutY="316.0" mnemonicParsing="false" onMouseClicked="#exitProgram" text="Exit" />
    </children>
 </Pane>

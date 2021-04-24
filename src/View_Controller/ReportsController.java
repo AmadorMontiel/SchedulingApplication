@@ -8,7 +8,6 @@ import Implementations.ContactDaoImpl;
 import Implementations.CustomerDaoImpl;
 import Interfaces.LambdaReportDisplay;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,6 +22,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * Controller for the reports screen.
+ */
 public class ReportsController {
 
     public TableView<Appointment> appointmentByMonthAndTypeTable;
@@ -52,11 +54,16 @@ public class ReportsController {
 
     public ComboBox<Contact> contactComboBox;
     public ComboBox<Customer> customerComboBox;
+
     private ObservableList<Appointment> appointmentByMonthList;
 
 
     /**
-     * Contains the second Lambda Expression
+     * Sets up the three tables and their various columns on the screen.
+     * LambdaReportDisplay is used in this method to assign the list of appointments
+     * by type and month to an Observable list. The method then returns that list and
+     * uses it to display the data in the appointmentsByMonthAndType Table.
+     * The use of a lambda here helps produce cleaner code, as it reduces the amount of code needed.
      */
     public void initialize() {
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
@@ -92,10 +99,16 @@ public class ReportsController {
 
     }
 
+    /**
+     * Sets the appointmentByContact Table data based on the selection of the Contact Combo Box.
+     */
     public void contactSelection() {
         appointmentByContactTable.setItems(AppointmentDaoImpl.getAppointmentsByContact(contactComboBox.getSelectionModel().getSelectedItem().getContactID()));
     }
 
+    /**
+     * Sets the Customer Table data based on the seelction of the Customer Combo Box.
+     */
     public void customerSelection() {
         customerTable.setItems(AppointmentDaoImpl.getAppointmentsByCustomer(customerComboBox.getSelectionModel().getSelectedItem().getId()));
     }
