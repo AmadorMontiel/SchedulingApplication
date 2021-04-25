@@ -67,7 +67,7 @@ public class ViewAppointmentsController  {
     }
 
     /**
-     * CHanges the table to show the appointments that occur over the next month.
+     * Changes the table to show the appointments that occur over the next month.
      */
     public void appointmentsByMonth() {
         appointmentsTable.setItems(AppointmentDaoImpl.getAppointmentsByMonth());

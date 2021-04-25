@@ -133,20 +133,22 @@ public class AddAppointmentController {
         LocalDate estEndDate = ESTEndTime.toLocalDate();
 
         if ((estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1))) && estStartDate.isEqual(estEndDate)) {
-            System.out.println("The Time works");
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId()))
             {
-                System.out.println("There is an overlapping appointment.");
+                errorAlert.setTitle("Error");
+                errorAlert.setHeaderText("Invalid Appointment Time");
+                errorAlert.setContentText("There is an overlapping appointment.");
+                errorAlert.show();
                 return false;
             }
             else {
-                System.out.println("No overlapping appointments.");
                 return true;
             }
         } else {
-            System.out.println(estStartDate);
-            System.out.println(estEndDate);
-            System.out.println("Time does not work.");
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Invalid Appointment Time");
+            errorAlert.setContentText("Appointment falls outside of business hours.");
+            errorAlert.show();
             return false;
         }
     }

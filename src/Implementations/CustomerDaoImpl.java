@@ -11,7 +11,6 @@ import java.sql.*;
  */
 public class CustomerDaoImpl {
 
-
     /**
      * Returns the list of customers from the database.
      * @return the list of customers

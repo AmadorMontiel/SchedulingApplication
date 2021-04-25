@@ -424,27 +424,20 @@ public class AppointmentDaoImpl {
             while (rs.next()) {
                 if(UTCStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate()) &&
                         UTCEndDate.isEqual(LocalDateTime.parse(rs.getString("End"), dtf).toLocalDate())) {
-                    System.out.println("New Start Time Requested: " + UTCStartingTime);
-                    System.out.println("Time of Appointment Already: " + LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
 
                     if (UTCStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
-                        System.out.println("Start time matches another appointment.");
                         return true;
                     } else if (UTCEndingTime.equals(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                        System.out.println("End time matches another appointment.");
                         return true;
                     } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             (UTCEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()) &&
                                     UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()))) {
-                        System.out.println("Ending time conflicts.");
                         return true;
                     } else if (UTCStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                        System.out.println("Starting time conflicts.");
                         return true;
                     } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             (UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()))) {
-                        System.out.println("New appointment start is before known start and end is after known end");
                         return true;
                     }
                 }
@@ -488,31 +481,23 @@ public class AppointmentDaoImpl {
             while (rs.next()) {
                 if(UTCStartDate.isEqual(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalDate()) &&
                         UTCEndDate.isEqual(LocalDateTime.parse(rs.getString("End"), dtf).toLocalDate())) {
-                    System.out.println("New Start Time Requested: " + UTCStartingTime);
-                    System.out.println("Time of Appointment Already: " + LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime());
-
                     if (rs.getInt("Appointment_ID") == currentAppointmentID) {
                         continue;
                     }
 
                     if (UTCStartingTime.equals(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime())) {
-                        System.out.println("Start time matches another appointment.");
                         return true;
                     } else if (UTCEndingTime.equals(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                        System.out.println("End time matches another appointment.");
                         return true;
                     } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             (UTCEndingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()) &&
                                     UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()))) {
-                        System.out.println("Ending time conflicts.");
                         return true;
                     } else if (UTCStartingTime.isAfter(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime())) {
-                        System.out.println("Starting time conflicts.");
                         return true;
                     } else if (UTCStartingTime.isBefore(LocalDateTime.parse(rs.getString("Start"), dtf).toLocalTime()) &&
                             (UTCEndingTime.isAfter(LocalDateTime.parse(rs.getString("End"), dtf).toLocalTime()))) {
-                        System.out.println("New appointment start is before known start and end is after known end");
                         return true;
                     }
                 }

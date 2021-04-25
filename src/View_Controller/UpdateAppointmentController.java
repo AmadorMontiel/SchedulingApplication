@@ -202,7 +202,6 @@ public class UpdateAppointmentController {
                 return false;
             }
             else {
-                System.out.println("No overlapping appointments.");
                 return true;
             }
         } else {
