@@ -45,7 +45,6 @@ public class DBConnection {
     public static void startConnection() {
         try {
             conn = DriverManager.getConnection(dbURL,username,password);
-            System.out.println("Connection Successful");
         }
         catch (SQLException e){
             e.printStackTrace();
@@ -67,7 +66,6 @@ public class DBConnection {
     public static void closeConnection()  {
         try {
             conn.close();
-            System.out.println("Connection Closed");
         }
         catch ( Exception ignore) {
         }
