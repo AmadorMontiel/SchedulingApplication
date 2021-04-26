@@ -192,7 +192,7 @@ public class UpdateAppointmentController {
         LocalTime estEnding = ESTEndTime.toLocalTime();
         LocalDate estEndDate = ESTEndTime.toLocalDate();
 
-        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && (estStartDate.isEqual(estEndDate) || (estStartDate.isBefore(estEndDate)))) {
+        if (estStarting.isAfter(businessOpenTime.minusSeconds(1)) && estEnding.isBefore(businessCloseTime.plusSeconds(1)) && (estStartDate.isEqual(estEndDate))) {
             if(AppointmentDaoImpl.isOverlappingAppointment(start,end, customerComboBox.getSelectionModel().getSelectedItem().getId(), Integer.parseInt(appointmentIDTextField.getText())))
             {
                 errorAlert.setTitle("Error");

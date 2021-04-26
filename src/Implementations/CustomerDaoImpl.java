@@ -53,7 +53,7 @@ public class CustomerDaoImpl {
     public static void addCustomer(String name, String address, String postalCode,
                             String phoneNumber, int divisionID) {
 
-        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, DivisionID)" +
+        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {

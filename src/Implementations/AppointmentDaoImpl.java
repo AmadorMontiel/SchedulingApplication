@@ -212,8 +212,8 @@ public class AppointmentDaoImpl {
                 String title = rs.getString("Title");
                 String type = rs.getString("Type");
                 String descripton = rs.getString("Description");
-                LocalDateTime start = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                LocalDateTime end = LocalDateTime.parse(rs.getString("End"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                LocalDateTime start = TimeConversion.localTimeConversion(LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                LocalDateTime end = TimeConversion.localTimeConversion(LocalDateTime.parse(rs.getString("End"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 int customer_ID = rs.getInt("Customer_ID");
                 Appointment a = new Appointment(appointmentID,title,type,descripton, start,end,customer_ID);
                 appointmentsByContact.add(a);
@@ -267,8 +267,8 @@ public class AppointmentDaoImpl {
                 String title = rs.getString("Title");
                 String type = rs.getString("Type");
                 String descripton = rs.getString("Description");
-                LocalDateTime start = LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                LocalDateTime end = LocalDateTime.parse(rs.getString("End"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                LocalDateTime start = TimeConversion.localTimeConversion(LocalDateTime.parse(rs.getString("Start"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                LocalDateTime end = TimeConversion.localTimeConversion(LocalDateTime.parse(rs.getString("End"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 int contactID = rs.getInt("Contact_ID");
                 int userID = rs.getInt("User_ID");
                 Appointment a = new Appointment(appointmentID,title,type,descripton, start,end,contactID, userID);

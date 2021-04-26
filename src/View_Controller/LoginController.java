@@ -37,7 +37,7 @@ public class LoginController {
 
     private final Alert loginAlert = new Alert(Alert.AlertType.ERROR);
     private DateTimeFormatter dtf = DateTimeFormatter.RFC_1123_DATE_TIME;
-    private ResourceBundle rb = ResourceBundle.getBundle("Utility/Nat", Locale.forLanguageTag("fr"));
+    private ResourceBundle rb;
     private FileWriter fw = new FileWriter("src/login_activity.txt",true);
     private PrintWriter pw = new PrintWriter(fw);
     int loginCount = 1;
@@ -54,8 +54,9 @@ public class LoginController {
      * zoneID from the user's computer and displays it.
      */
     public void initialize() {
-
         if(Locale.getDefault().getLanguage().equals("fr")) {
+            rb = ResourceBundle.getBundle("Utility/Nat", Locale.getDefault());
+            zoneID.setText(ZoneId.systemDefault().toString());
             translation();
         } else {
             zoneID.setText(ZoneId.systemDefault().toString());
@@ -105,7 +106,7 @@ public class LoginController {
             loginCount++;
         } else {
             pw.println("Login Attempt #" + loginCount + " - User: " + usernameTextField.getText() +
-                    " - Occured at: " + ZonedDateTime.now(ZoneId.of("UTC")).format(dtf)  + " - Successful.");;
+                    " - Occured at: " + ZonedDateTime.now(ZoneId.of("UTC")).format(dtf)  + " - Successful.");
         }
     }
 
@@ -133,7 +134,6 @@ public class LoginController {
      * Translates the login screen language to French.
      */
     private void translation() {
-        zoneID.setText(rb.getString(ZoneId.systemDefault().toString()));
         signInLabel.setText(rb.getString("Please_sign_in"));
         loginButton.setText(rb.getString("login"));
         exitButton.setText(rb.getString("exit"));
